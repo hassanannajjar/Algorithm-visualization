@@ -1,0 +1,200 @@
+/* Fibonacci demo: dual panels, trees, quick-guide table, title accents */
+
+.reel-viz-header h1 .recursive {
+  color: var(--red);
+  text-shadow: 0 0 24px var(--red-glow);
+}
+
+.reel-viz-header h1 .vs {
+  color: var(--text-dim);
+  font-weight: 600;
+  font-size: 0.78em;
+}
+
+.reel-viz-header h1 .memoized {
+  color: var(--green);
+  text-shadow: 0 0 24px var(--green-glow);
+}
+
+.panels-row {
+  container-type: size;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  flex: none;
+  width: 100%;
+  /* Fixed canvas band inside 1080×1920 canvas — avoids stretched dead space above quick guide */
+  height: 640px;
+  min-height: 420px;
+  max-height: 720px;
+  align-items: stretch;
+  align-content: stretch;
+}
+
+.panel {
+  background: var(--panel);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--panel-border);
+  border-radius: 13px;
+  padding: 10px 9px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.panel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.panel-title {
+  font-size: clamp(17px, 4cqw, 24px);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.panel.recursive-panel .panel-title { color: var(--red); }
+.panel.memoized-panel .panel-title { color: var(--green); }
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.stat {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 5px 9px;
+  font-size: clamp(12px, 2.6cqw, 15px);
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.35;
+}
+
+.stat .label { color: var(--text-dim); }
+.stat .value { color: var(--text); font-weight: 700; }
+
+.panel.recursive-panel .stat.calls .value { color: var(--red); }
+.panel.recursive-panel .stat.redundant-stat .value { color: #fb923c; }
+.panel.memoized-panel .stat.calls .value { color: var(--green); }
+.panel.memoized-panel .stat.hits .value { color: var(--orange); }
+
+.canvas-container {
+  position: relative;
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 140px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255,77,109,0.06), transparent 60%),
+              radial-gradient(ellipse at 50% 100%, rgba(74,222,128,0.06), transparent 55%),
+              rgba(6, 4, 12, 0.9);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.panel.memoized-panel .canvas-container {
+  background: radial-gradient(ellipse at 50% 0%, rgba(74,222,128,0.08), transparent 60%),
+              rgba(6, 4, 12, 0.9);
+}
+
+canvas { display: block; width: 100%; height: 100%; }
+
+.progress-bar {
+  display: flex;
+  gap: 3px;
+  margin-top: 8px;
+  height: 12px;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.progress-dot {
+  flex: 1;
+  background: rgba(255,255,255,0.08);
+  border-radius: 2px;
+  transition: background 0.15s;
+  min-height: 4px;
+}
+
+.panel.recursive-panel .progress-dot.active {
+  background: var(--red);
+  box-shadow: 0 0 6px var(--red-glow);
+}
+
+.panel.memoized-panel .progress-dot.active {
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green-glow);
+}
+
+.complexity-label {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-size: clamp(11px, 2.4cqw, 14px);
+  color: var(--text-dim);
+  font-style: italic;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.comparison-table {
+  flex-shrink: 0;
+  width: 100%;
+  margin-top: 0;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  padding: 12px 12px 10px;
+}
+
+.comparison-table h3 {
+  font-size: clamp(12px, 2.8cqw, 16px);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 1.2fr 0.9fr 0.9fr;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  font-size: clamp(15px, 3.5cqw, 20px);
+}
+
+.table-row:last-child { border-bottom: none; padding-bottom: 2px; }
+
+.table-row.header-row {
+  color: var(--text-dim);
+  font-size: clamp(12px, 2.6cqw, 15px);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-bottom: 8px;
+  padding-top: 2px;
+}
+
+.table-row .metric { color: var(--text-dim); font-size: 0.92em; align-self: center; }
+
+.table-row .recursive-val {
+  color: var(--red);
+  text-align: center;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.95em;
+}
+
+.table-row .memoized-val {
+  color: var(--green);
+  text-align: center;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.95em;
+}

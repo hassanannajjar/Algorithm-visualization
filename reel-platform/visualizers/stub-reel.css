@@ -1,0 +1,64 @@
+/* Minimal second visualizer: proves ReelPlatform wiring without Fibonacci canvases */
+
+.reel-viz-header h1 .stub-a {
+  color: var(--accent);
+  text-shadow: 0 0 22px rgba(167, 139, 250, 0.4);
+}
+
+.reel-viz-header h1 .stub-b {
+  color: var(--text-dim);
+  font-weight: 600;
+  font-size: 0.78em;
+}
+
+.stub-viz-slot {
+  flex: none;
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(6, 4, 12, 0.85);
+  border-radius: 14px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.stub-viz-slot .hint {
+  color: var(--text-dim);
+  font-size: clamp(13px, 3.2cqw, 18px);
+  text-align: center;
+  padding: 0 16px;
+  line-height: 1.4;
+}
+
+.stub-viz-slot .meter {
+  font-size: clamp(36px, 10cqw, 56px);
+  font-weight: 800;
+  color: var(--green);
+  text-shadow: 0 0 24px var(--green-glow);
+}
+
+.stub-explain {
+  flex-shrink: 0;
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  font-size: clamp(13px, 3cqw, 17px);
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+
+.stub-explain h3 {
+  font-size: clamp(12px, 2.8cqw, 16px);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  color: var(--text-dim);
+  font-weight: 800;
+  text-align: center;
+}

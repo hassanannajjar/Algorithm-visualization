@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reel visualizer studio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+  :root {
+    --bg: #070510;
+    --card: rgba(18, 12, 32, 0.85);
+    --border: rgba(139, 92, 246, 0.25);
+    --text: #f4f4ff;
+    --muted: #8b849e;
+    --accent: #a78bfa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(900px 500px at 50% 0%, rgba(88, 28, 135, 0.35), transparent 55%), var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px 20px 48px;
+    line-height: 1.5;
+  }
+  main { max-width: 520px; margin: 0 auto; }
+  h1 { font-size: 1.75rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; }
+  p.lead { color: var(--muted); margin-bottom: 24px; font-size: 0.95rem; }
+  ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  a {
+    display: block;
+    padding: 16px 18px;
+    border-radius: 14px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  a:hover {
+    border-color: rgba(167, 139, 250, 0.55);
+    box-shadow: 0 0 24px rgba(167, 139, 250, 0.12);
+  }
+  a span.meta {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--muted);
+  }
+  code { font-size: 0.88em; color: var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Algorithm reel studio</h1>
+  <p class="lead">Each page below loads the shared 1080×1920 shell from <code>reel-platform/</code> (scaling, sidebar record controls, footer play). Add a new visualizer by copying <code>stub-demo.html</code> and wiring your script with <code>ReelPlatform.bootControls</code>.</p>
+  <ul>
+    <li>
+      <a href="fibonacci_visualizer_v3.html">Fibonacci — recursive vs memoized <span class="meta">Trees, stats, quick guide</span></a>
+    </li>
+    <li>
+      <a href="reel-platform/visualizers/stub-demo.html">Stub template <span class="meta">Minimal counter demo; copy to start a new reel</span></a>
+    </li>
+  </ul>
+</main>
+</body>
+</html>

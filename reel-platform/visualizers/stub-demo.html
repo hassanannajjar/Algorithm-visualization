@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stub reel visualizer — template</title>
+<link rel="stylesheet" href="../reel-shell.css">
+<link rel="stylesheet" href="stub-reel.css">
+</head>
+<body>
+
+<div class="reel-fit">
+  <div class="reel-scaler-wrap" id="reelScalerWrap">
+    <div class="reel-scaler" id="reelScaler">
+<div class="record-frame-wrapper" id="recordFrameTarget">
+  <div class="record-frame reel-viz-root">
+    <div class="reel-viz-stack">
+    <header class="reel-viz-header">
+      <div class="spark">Template</div>
+      <h1>
+        <span class="stub-a">Your viz</span>
+        <span class="stub-b"> — </span>
+        <span class="stub-a">stub</span>
+      </h1>
+      <div class="subtitle">Replace header, visualizer slot, and explain section. Keep <code>reel-viz-*</code> regions for consistency.</div>
+    </header>
+
+    <div class="reel-viz-visualizer stub-viz-slot">
+      <p class="hint" id="stubHint">Uses the same sidebar Play · Reset · Speed · Record as other reels.</p>
+      <div class="meter" id="stubMeter" aria-live="polite">0</div>
+    </div>
+
+    <section class="reel-viz-explain stub-explain" aria-label="Notes">
+      <h3>Open in studio</h3>
+      <p>This file loads <strong>stub-visualizer.js</strong> alongside <strong>reel-platform.js</strong>. Copy this HTML structure for a new algorithm page, swap the middle block, and add your own script + CSS.</p>
+    </section>
+
+    <footer class="reel-viz-footer footer-handle">
+      <button type="button" class="handle" id="reelFooterPlay" aria-label="Play visualization (same as sidebar Play)">
+        <span class="sym">@</span><span class="name">dev.hassan.najjar</span>
+      </button>
+    </footer>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<aside class="side-controls" aria-label="Recording controls">
+  <a class="side-controls-back" href="../../reel_studio.html">← Studio</a>
+  <div class="hint">Controls stay outside the 1080×1920 frame so they do not appear in your Reel.</div>
+  <button type="button" class="primary" id="playBtn">▶ Play</button>
+  <button type="button" id="resetBtn">↺ Reset</button>
+  <div class="speed-control">
+    <label>Speed</label>
+    <input type="range" id="speedSlider" min="50" max="800" value="350" aria-label="Animation speed">
+  </div>
+  <button type="button" class="record-screen" id="recordScreenBtn">● Record screen</button>
+  <button type="button" id="stopRecordBtn" disabled>■ Stop & save</button>
+  <button type="button" id="reelOnlyBtn" title="Open layout with only the reel (best for tab capture)">⛶ Reel-only view</button>
+  <div class="record-hint" id="recordStatus">Record saves a 1080×1920 WebM (9:16) — ready for Reels, no crop.</div>
+</aside>
+
+<script src="../reel-platform.js"></script>
+<script src="stub-visualizer.js"></script>
+</body>
+</html>
