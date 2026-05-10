@@ -40,7 +40,7 @@
     var el = document.getElementById('stubMeter');
     var hint = document.getElementById('stubHint');
     if (el) el.textContent = '0';
-    if (hint) hint.textContent = 'Uses the same sidebar Play · Reset · Speed · Record as other reels.';
+    if (hint) hint.textContent = 'Same sidebar as other reels: Play · Reset · Speed · Reel-only.';
   }
 
   function wirePlatform() {

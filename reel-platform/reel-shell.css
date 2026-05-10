@@ -93,7 +93,7 @@ body {
 }
 
 .record-frame-wrapper::before {
-  content: "1080×1920 · 9:16 — record inside this frame";
+  content: "1080×1920 · 9:16 — design safe area";
   position: absolute;
   top: -24px;
   left: 50%;
@@ -109,7 +109,7 @@ body {
 }
 
 html.reel-only .record-frame-wrapper::before {
-  content: "1080×1920 reel — share this tab when recording";
+  content: "1080×1920 reel — full-window layout";
 }
 
 .record-frame {
@@ -334,13 +334,11 @@ html.reel-only .record-frame-wrapper::before {
   flex-shrink: 0;
 }
 
-.footer-handle button.handle {
-  appearance: none;
-  -webkit-appearance: none;
+.footer-handle .handle {
   margin: 0;
+  box-sizing: border-box;
   font: inherit;
   color: inherit;
-  cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -354,16 +352,18 @@ html.reel-only .record-frame-wrapper::before {
   background: rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(74, 222, 128, 0.45);
   box-shadow: 0 0 20px rgba(74, 222, 128, 0.2);
-  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
 }
 
-.footer-handle button.handle:hover {
+.footer-handle button.handle {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.footer-handle button.handle:hover:not(:disabled) {
   border-color: rgba(74, 222, 128, 0.65);
   box-shadow: 0 0 26px rgba(74, 222, 128, 0.28);
-}
-
-.footer-handle button.handle:active:not(:disabled) {
-  transform: scale(0.98);
 }
 
 .footer-handle button.handle:focus-visible {
@@ -376,16 +376,18 @@ html.reel-only .record-frame-wrapper::before {
   cursor: not-allowed;
 }
 
-.footer-handle button.handle .sym {
-  color: #fbbf24;
-  text-shadow: 0 0 10px rgba(251, 191, 36, 0.55);
+.footer-handle .handle .sym {
+  color: var(--orange);
   font-weight: 800;
+  text-shadow: 0 0 10px rgba(251, 191, 36, 0.35);
 }
 
-.footer-handle button.handle .name {
+.footer-handle .handle .name {
   color: var(--green);
-  text-shadow: 0 0 14px var(--green-glow);
   font-weight: 800;
+  text-shadow:
+    0 0 6px rgba(74, 222, 128, 0.22),
+    0 0 14px rgba(74, 222, 128, 0.12);
 }
 
 html.reel-only body {
@@ -427,9 +429,9 @@ html.reel-only .reel-fit { max-width: 100%; }
 .side-controls .record-hint {
   font-size: 7px;
   color: var(--text-dim);
-  line-height: 1.4;
+  line-height: 1.45;
   text-align: center;
-  opacity: 0.85;
+  opacity: 0.9;
   padding: 0 2px;
 }
 

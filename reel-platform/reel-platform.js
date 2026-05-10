@@ -1,6 +1,5 @@
 /**
- * Shared 1080×1920 reel shell: scaling, reel-only hash, sidebar record/export, play UI sync.
- * Visualizers pass play/reset/speed + layout refresh hooks.
+ * Shared 1080×1920 reel shell: scaling, reel-only hash, playback + export at exact frame size.
  */
 (function(global) {
   'use strict';
@@ -15,10 +14,7 @@
   var recordComposeCanvas = null;
   var recordComposeCtx = null;
   var recordComposeRaf = null;
-  /** true when capture used CropTarget.fromElement(tab region = frame only) */
   var recordUsedElementCrop = false;
-
-  /** Filename without extension; actual .mp4 or .webm chosen from encoder support */
   var recordFileStem = 'instagram-reel-1080x1920';
 
   function setRecordStatus(msg) {
@@ -109,16 +105,11 @@
     return 'webm';
   }
 
-  /**
-   * Prefer H.264 MP4 (Instagram-friendly) where MediaRecorder allows it — often Safari/macOS.
-   * Chrome / many Chromium builds typically fall back to VP9 WebM.
-   */
   function pickMimeType() {
     if (!global.MediaRecorder) return '';
     var types = [
       'video/mp4; codecs=avc1.42E01E',
       'video/mp4; codecs=avc1.424028DE',
-      'video/mp4; codecs=hvc1.1.6.L93.B0',
       'video/mp4',
       'video/webm;codecs=vp9',
       'video/webm;codecs=vp8',
@@ -132,7 +123,7 @@
 
   async function startScreenRecord() {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
-      setRecordStatus('This browser cannot record from the page. Film the gradient frame with your phone or use QuickTime / OBS.');
+      setRecordStatus('Use Chrome/Edge for tab capture, or film the neon frame with your phone.');
       return;
     }
 
@@ -143,10 +134,7 @@
     if (global.CropTarget && targetEl && typeof CropTarget.fromElement === 'function') {
       try {
         var ct = await CropTarget.fromElement(targetEl);
-        cropConstraints = {
-          audio: false,
-          video: { cropTarget: ct }
-        };
+        cropConstraints = { audio: false, video: { cropTarget: ct } };
       } catch (e1) {
         cropConstraints = null;
       }
@@ -164,10 +152,7 @@
         });
       }, crop: true });
       attempts.push({ run: function() {
-        return navigator.mediaDevices.getDisplayMedia({
-          video: cropVid,
-          audio: false
-        });
+        return navigator.mediaDevices.getDisplayMedia({ video: cropVid, audio: false });
       }, crop: true });
     }
     attempts.push({ run: function() {
@@ -186,10 +171,10 @@
         stream = await attempts[ai].run();
         recordUsedElementCrop = attempts[ai].crop === true;
         break;
-      } catch (e2) { /* try next capture strategy */ }
+      } catch (e2) {}
     }
     if (!stream) {
-      setRecordStatus('Recording cancelled or not allowed. Use Reel-only view (#reel) and share this tab, or record the neon frame in QuickTime / OBS.');
+      setRecordStatus('Capture cancelled. Try Reel-only (#reel) and share this tab.');
       return;
     }
 
@@ -219,7 +204,7 @@
     try {
       await composeVideo.play();
     } catch (ePlay) {
-      setRecordStatus('Could not attach to screen capture preview. Allow autoplay / try Chrome.');
+      setRecordStatus('Could not start capture preview.');
       cleanupRecordStream();
       return;
     }
@@ -250,10 +235,9 @@
     recordComposeCanvas = canvas;
     recordComposeCtx = ctx;
 
-    /* Hard 30 fps avoids oversized files; dimension is always 1080×1920. */
     var outStream = canvas.captureStream(30);
     if (!outStream || !outStream.getVideoTracks().length) {
-      setRecordStatus('Canvas.captureStream unsupported here — update your browser.');
+      setRecordStatus('Browser cannot capture canvas stream.');
       cleanupRecordStream();
       return;
     }
@@ -301,9 +285,7 @@
 
     var mime = pickMimeType();
     var isMp4Out = mime && mime.indexOf('mp4') !== -1;
-    var recOpts = {
-      videoBitsPerSecond: isMp4Out ? 12000000 : 9000000
-    };
+    var recOpts = { videoBitsPerSecond: isMp4Out ? 12000000 : 9000000 };
     if (mime) recOpts.mimeType = mime;
     try {
       mediaRecorder = new MediaRecorder(outStream, recOpts);
@@ -311,7 +293,7 @@
       try {
         mediaRecorder = mime ? new MediaRecorder(outStream, { mimeType: mime }) : new MediaRecorder(outStream);
       } catch (e5) {
-        setRecordStatus('Could not start MediaRecorder on this device.');
+        setRecordStatus('MediaRecorder unavailable on this device.');
         cleanupRecordStream();
         return;
       }
@@ -322,7 +304,7 @@
     };
     mediaRecorder.onstop = function() {
       if (!recordedChunks.length) {
-        setRecordStatus('No frames captured. Share your screen until you tap Stop & save.');
+        setRecordStatus('No video data — keep sharing until you press Stop.');
         cleanupRecordStream();
         return;
       }
@@ -337,9 +319,7 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      setRecordStatus(ext === 'mp4'
-        ? 'Saved ' + IG_REEL_W + '×' + IG_REEL_H + ' MP4 (H.264) — 9:16, no crop.'
-        : 'Saved ' + IG_REEL_W + '×' + IG_REEL_H + ' WebM — 9:16, no crop. Re-encode to MP4 if your app insists (HandBrake, Photos, FFmpeg).');
+      setRecordStatus('Saved exactly ' + IG_REEL_W + '×' + IG_REEL_H + ' · Post as Instagram Reel (not Feed — Feed only allows 4:5–16:9).');
       cleanupRecordStream();
     };
 
@@ -350,14 +330,15 @@
       rs.classList.add('recording');
     }
     if (st) st.disabled = false;
-    setRecordStatus('Recording ' + IG_REEL_W + '×' + IG_REEL_H + ' — ' + (isMp4Out ? 'MP4' : 'WebM') + '. Pick this tab; frame fills the clip.');
+
+    setRecordStatus('Recording… Choose this tab. File will be ' + IG_REEL_W + '×' + IG_REEL_H + ' (' + (isMp4Out ? 'MP4' : 'WebM') + ').');
 
     try {
       drawInstagramFrame();
       mediaRecorder.start(200);
       recordComposeRaf = requestAnimationFrame(composeLoop);
     } catch (e6) {
-      setRecordStatus('Could not begin recording chunk capture.');
+      setRecordStatus('Could not start recording.');
       cleanupRecordStream();
     }
   }
@@ -376,9 +357,9 @@
    * @param {() => boolean} opts.getIsAnimating
    * @param {() => (void|Promise<void>)} opts.onPlay
    * @param {() => void} opts.onReset
-   * @param {(sliderRaw: number) => void} opts.onSpeedInput — raw value from #speedSlider
-   * @param {() => void} [opts.onLayoutRefresh] — resize / reel-mode; skip when animating
-   * @param {string} [opts.recordDownloadBasename] stem or name.ext (.mp4/.webm stripped; real ext from encoder)
+   * @param {(sliderRaw: number) => void} opts.onSpeedInput
+   * @param {() => void} [opts.onLayoutRefresh]
+   * @param {string} [opts.recordDownloadBasename] filename stem (.mp4/.webm appended)
    */
   function bootControls(opts) {
     if (!opts || typeof opts.getIsAnimating !== 'function') {
@@ -411,9 +392,10 @@
 
     var rb = document.getElementById('recordScreenBtn');
     var stb = document.getElementById('stopRecordBtn');
-    var reelBtn = document.getElementById('reelOnlyBtn');
     if (rb) rb.addEventListener('click', function() { startScreenRecord(); });
     if (stb) stb.addEventListener('click', function() { stopScreenRecord(); });
+
+    var reelBtn = document.getElementById('reelOnlyBtn');
     if (reelBtn) {
       reelBtn.addEventListener('click', function() {
         if (global.location.hash === '#reel' || global.location.hash === '#reel-only') {
@@ -424,9 +406,6 @@
         applyReelOnlyFromHash();
         updateReelScale();
         if (!opts.getIsAnimating()) onLayoutRefresh();
-        setRecordStatus(document.documentElement.classList.contains('reel-only')
-          ? 'Reel-only: record this tab — saved file is exactly 1080×1920 (no crop).'
-          : 'Record → WebM is 1080×1920. Pick this tab; controls stay off the frame.');
       });
     }
 
@@ -442,16 +421,9 @@
     });
   }
 
-  /**
-   * Apply hash / scale / status, then defer one frame pair so layout is stable for canvas sizing.
-   * Attach ResizeObserver inside onVisualizerReady if the visualizer needs layout refresh.
-   */
   function bootApp(opts) {
     applyReelOnlyFromHash();
     updateReelScale();
-    if (document.documentElement.classList.contains('reel-only')) {
-      setRecordStatus('Reel-only: choose this tab when recording — download is 1080×1920 WebM.');
-    }
     requestAnimationFrame(function() {
       requestAnimationFrame(function() {
         if (opts && typeof opts.onVisualizerReady === 'function') opts.onVisualizerReady();
@@ -462,8 +434,8 @@
   global.ReelPlatform = {
     applyReelOnlyFromHash: applyReelOnlyFromHash,
     updateReelScale: updateReelScale,
-    setRecordStatus: setRecordStatus,
     setPlayControlsBusy: setPlayControlsBusy,
+    setRecordStatus: setRecordStatus,
     bootControls: bootControls,
     bootApp: bootApp
   };

@@ -84,9 +84,9 @@
     </section>
 
     <footer class="reel-viz-footer footer-handle">
-      <button type="button" class="handle" id="reelFooterPlay" aria-label="Play visualization (same as sidebar Play)">
+      <div class="handle">
         <span class="sym">@</span><span class="name">dev.hassan.najjar</span>
-      </button>
+      </div>
     </footer>
     </div>
   </div>
@@ -95,9 +95,9 @@
   </div>
 </div>
 
-<aside class="side-controls" aria-label="Recording controls">
+<aside class="side-controls" aria-label="Playback controls">
   <a class="side-controls-back" href="reel_studio.html">← Studio</a>
-  <div class="hint">Controls stay outside the 1080×1920 frame so they do not appear in your Reel.</div>
+  <div class="hint">Controls sit outside the 1080×1920 frame (screen capture / Reels).</div>
   <button type="button" class="primary" id="playBtn">▶ Play</button>
   <button type="button" id="resetBtn">↺ Reset</button>
   <div class="speed-control">
@@ -108,10 +108,10 @@
     <input type="checkbox" id="soundToggle" checked aria-label="Play sound during visualization">
     <span>Sound</span>
   </label>
-  <button type="button" class="record-screen" id="recordScreenBtn">● Record screen</button>
+  <button type="button" class="record-screen" id="recordScreenBtn">● Record reel</button>
   <button type="button" id="stopRecordBtn" disabled>■ Stop & save</button>
-  <button type="button" id="reelOnlyBtn" title="Open layout with only the reel (best for tab capture)">⛶ Reel-only view</button>
-  <div class="record-hint" id="recordStatus">Record: 1080×1920 (9:16). Safari often saves MP4; Chrome usually WebM — both need no crop.</div>
+  <button type="button" id="reelOnlyBtn" title="Layout with only the reel (clean tab for capture)">⛶ Reel-only view</button>
+  <div class="record-hint" id="recordStatus">Record → exact 1080×1920 (9:16). Upload as a Reel — Feed posts reject full-vertical.</div>
 </aside>
 
 <script src="reel-platform/reel-platform.js"></script>
