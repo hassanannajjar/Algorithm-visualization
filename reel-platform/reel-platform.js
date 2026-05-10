@@ -18,7 +18,8 @@
   /** true when capture used CropTarget.fromElement(tab region = frame only) */
   var recordUsedElementCrop = false;
 
-  var recordDownloadBasename = 'instagram-reel-1080x1920.webm';
+  /** Filename without extension; actual .mp4 or .webm chosen from encoder support */
+  var recordFileStem = 'instagram-reel-1080x1920';
 
   function setRecordStatus(msg) {
     var el = document.getElementById('recordStatus');
@@ -97,16 +98,34 @@
     }
   }
 
+  function stripRecordStem(name) {
+    if (!name || typeof name !== 'string') return 'instagram-reel-1080x1920';
+    return name.replace(/\.(webm|mp4|mpeg)$/i, '');
+  }
+
+  function extensionForMime(mime) {
+    var m = (mime || '').toLowerCase();
+    if (m.indexOf('mp4') !== -1) return 'mp4';
+    return 'webm';
+  }
+
+  /**
+   * Prefer H.264 MP4 (Instagram-friendly) where MediaRecorder allows it — often Safari/macOS.
+   * Chrome / many Chromium builds typically fall back to VP9 WebM.
+   */
   function pickMimeType() {
+    if (!global.MediaRecorder) return '';
     var types = [
+      'video/mp4; codecs=avc1.42E01E',
+      'video/mp4; codecs=avc1.424028DE',
+      'video/mp4; codecs=hvc1.1.6.L93.B0',
+      'video/mp4',
       'video/webm;codecs=vp9',
       'video/webm;codecs=vp8',
       'video/webm'
     ];
     for (var i = 0; i < types.length; i++) {
-      if (global.MediaRecorder && MediaRecorder.isTypeSupported(types[i])) {
-        return types[i];
-      }
+      if (MediaRecorder.isTypeSupported(types[i])) return types[i];
     }
     return '';
   }
@@ -281,7 +300,10 @@
     }
 
     var mime = pickMimeType();
-    var recOpts = { videoBitsPerSecond: 9000000 };
+    var isMp4Out = mime && mime.indexOf('mp4') !== -1;
+    var recOpts = {
+      videoBitsPerSecond: isMp4Out ? 12000000 : 9000000
+    };
     if (mime) recOpts.mimeType = mime;
     try {
       mediaRecorder = new MediaRecorder(outStream, recOpts);
@@ -309,12 +331,15 @@
       var url = URL.createObjectURL(blob);
       var a = document.createElement('a');
       a.href = url;
-      a.download = recordDownloadBasename;
+      var ext = extensionForMime(blobType);
+      a.download = recordFileStem + '.' + ext;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      setRecordStatus('Saved ' + IG_REEL_W + '×' + IG_REEL_H + ' WebM (9:16) — upload to Instagram Reels without cropping.');
+      setRecordStatus(ext === 'mp4'
+        ? 'Saved ' + IG_REEL_W + '×' + IG_REEL_H + ' MP4 (H.264) — 9:16, no crop.'
+        : 'Saved ' + IG_REEL_W + '×' + IG_REEL_H + ' WebM — 9:16, no crop. Re-encode to MP4 if your app insists (HandBrake, Photos, FFmpeg).');
       cleanupRecordStream();
     };
 
@@ -325,7 +350,7 @@
       rs.classList.add('recording');
     }
     if (st) st.disabled = false;
-    setRecordStatus('Recording → export is exactly ' + IG_REEL_W + '×' + IG_REEL_H + '. Pick this tab; gradient frame fills the clip.');
+    setRecordStatus('Recording ' + IG_REEL_W + '×' + IG_REEL_H + ' — ' + (isMp4Out ? 'MP4' : 'WebM') + '. Pick this tab; frame fills the clip.');
 
     try {
       drawInstagramFrame();
@@ -353,7 +378,7 @@
    * @param {() => void} opts.onReset
    * @param {(sliderRaw: number) => void} opts.onSpeedInput — raw value from #speedSlider
    * @param {() => void} [opts.onLayoutRefresh] — resize / reel-mode; skip when animating
-   * @param {string} [opts.recordDownloadBasename]
+   * @param {string} [opts.recordDownloadBasename] stem or name.ext (.mp4/.webm stripped; real ext from encoder)
    */
   function bootControls(opts) {
     if (!opts || typeof opts.getIsAnimating !== 'function') {
@@ -364,7 +389,7 @@
     }
 
     if (opts.recordDownloadBasename) {
-      recordDownloadBasename = opts.recordDownloadBasename;
+      recordFileStem = stripRecordStem(opts.recordDownloadBasename);
     }
 
     var onLayoutRefresh = typeof opts.onLayoutRefresh === 'function' ? opts.onLayoutRefresh : function() {};

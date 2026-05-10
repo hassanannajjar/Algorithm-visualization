@@ -52,7 +52,7 @@
         delayMs = 850 - v;
       },
       onLayoutRefresh: function() {},
-      recordDownloadBasename: 'stub-instagram-reel-1080x1920.webm'
+      recordDownloadBasename: 'stub-instagram-reel-1080x1920'
     });
 
     ReelPlatform.bootApp({

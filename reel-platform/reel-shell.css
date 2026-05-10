@@ -76,12 +76,20 @@ body {
   width: 100%;
   height: 100%;
   border-radius: var(--reel-corner-outer);
-  padding: 4px;
-  background: var(--neon-mix);
+  /* Double-layer fill: inner panel + gradient ring — cleaner corners than padding+overflow */
+  border: 4px solid transparent;
+  background-image:
+    linear-gradient(180deg, rgba(14, 8, 28, 0.98) 0%, var(--bg-reel) 45%, #050308 100%),
+    var(--neon-mix);
+  background-origin: border-box;
+  -webkit-background-clip: padding-box, border-box;
+  background-clip: padding-box, border-box;
   box-shadow: 0 0 0 1px rgba(255,255,255,0.06),
               0 24px 80px rgba(0, 0, 0, 0.65),
               0 0 60px rgba(167, 139, 250, 0.12);
   overflow: hidden;
+  transform: translateZ(0);
+  isolation: isolate;
 }
 
 .record-frame-wrapper::before {
@@ -108,8 +116,9 @@ html.reel-only .record-frame-wrapper::before {
   container-type: size;
   height: 100%;
   border-radius: var(--reel-record-inner-r);
-  background: linear-gradient(180deg, rgba(14, 8, 28, 0.98) 0%, var(--bg-reel) 45%, #050308 100%);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: transparent;
+  border: none;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -441,6 +450,14 @@ html.reel-only .reel-fit { max-width: 100%; }
 
 @media print {
   .side-controls, .record-frame-wrapper::before { display: none; }
-  .record-frame-wrapper { padding: 0; background: transparent; box-shadow: none; }
-  .record-frame { border-radius: 0; }
+  .record-frame-wrapper {
+    border: none;
+    background: none;
+    box-shadow: none;
+  }
+  .record-frame {
+    border-radius: 0;
+    box-shadow: none;
+    background: var(--bg-reel);
+  }
 }

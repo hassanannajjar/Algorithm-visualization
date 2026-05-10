@@ -637,7 +637,7 @@
         animationSpeed = 850 - v;
       },
       onLayoutRefresh: scheduleInit,
-      recordDownloadBasename: 'fibonacci-instagram-reel-1080x1920.webm'
+      recordDownloadBasename: 'fibonacci-instagram-reel-1080x1920'
     });
 
     ReelPlatform.bootApp({
