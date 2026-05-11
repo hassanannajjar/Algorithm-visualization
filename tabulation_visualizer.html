@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recursive vs Tabulated — Bottom-Up DP Visualizer</title>
+<link rel="stylesheet" href="reel-platform/reel-shell.css">
+<link rel="stylesheet" href="reel-platform/visualizers/tabulation-reel.css">
+</head>
+<body>
+
+<div class="reel-fit">
+  <div class="reel-scaler-wrap" id="reelScalerWrap">
+    <div class="reel-scaler" id="reelScaler">
+<div class="record-frame-wrapper" id="recordFrameTarget">
+  <div class="record-frame reel-viz-root">
+    <div class="reel-viz-stack">
+    <header class="reel-viz-header">
+      <div class="spark">Pattern 2 · Tabulation</div>
+      <h1>
+        <span class="recursive">Top-down</span>
+        <span class="vs"> vs </span>
+        <span class="tabulated">Bottom-up</span>
+      </h1>
+      <div class="subtitle">fib(9) — memoization breaks down; tabulation builds up. No recursion, no stack, just a loop filling a table.</div>
+    </header>
+
+    <div class="reel-viz-visualizer panels-row">
+      <div class="panel recursive-panel">
+        <div class="panel-header">
+          <div class="panel-title">Simple recursion</div>
+          <div class="stats">
+            <div class="stat calls"><span class="label">calls </span><span class="value" id="recCalls">0</span></div>
+            <div class="stat redundant-stat"><span class="label">dup n </span><span class="value" id="recRedundant">0</span></div>
+            <div class="stat"><span class="label" id="recFibLabel">fib(9)=</span><span class="value" id="recFibVal">?</span></div>
+          </div>
+        </div>
+        <div class="canvas-container">
+          <canvas id="recCanvas"></canvas>
+          <div class="complexity-label">top-down · O(2ⁿ)</div>
+        </div>
+        <div class="progress-bar" id="recProgress"></div>
+      </div>
+
+      <div class="panel tabulated-panel">
+        <div class="panel-header">
+          <div class="panel-title">Tabulation</div>
+          <div class="stats">
+            <div class="stat writes"><span class="label">writes </span><span class="value" id="tabWrites">0</span></div>
+            <div class="stat lookups"><span class="label">i </span><span class="value" id="tabIndex">–</span></div>
+            <div class="stat"><span class="label" id="tabFibLabel">fib(9)=</span><span class="value" id="tabFibVal">?</span></div>
+          </div>
+        </div>
+        <div class="tab-stage">
+          <div class="tab-grid-head">
+            <div class="tab-grid-head-i">i</div>
+            <div class="tab-grid-head-v">f(i)</div>
+          </div>
+          <div class="tab-grid" id="tabGrid"></div>
+          <div class="tab-formula" id="tabFormula">for i = 3..n  →  f[i] = f[i-1] + f[i-2]</div>
+          <div class="complexity-label">bottom-up · O(n)</div>
+        </div>
+        <div class="progress-bar" id="tabProgress"></div>
+      </div>
+    </div>
+
+    <section class="reel-viz-explain comparison-table" aria-label="Comparison">
+      <h3>Quick guide</h3>
+      <div class="table-row header-row">
+        <div></div>
+        <div class="recursive-val">Recursive</div>
+        <div class="tabulated-val">Tabulation</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">direction</div>
+        <div class="recursive-val">top → down</div>
+        <div class="tabulated-val">bottom → up</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">memory</div>
+        <div class="recursive-val">call stack</div>
+        <div class="tabulated-val">O(n) table</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">stack overflow</div>
+        <div class="recursive-val">risky</div>
+        <div class="tabulated-val">safe</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">work fib(9)</div>
+        <div class="recursive-val" id="tabCallsRec">109</div>
+        <div class="tabulated-val" id="tabWritesMem">9</div>
+      </div>
+    </section>
+
+    <footer class="reel-viz-footer footer-handle">
+      <div class="handle">
+        <span class="sym">@</span><span class="name">dev.hassan.najjar</span>
+      </div>
+    </footer>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<aside class="side-controls" aria-label="Playback controls">
+  <a class="side-controls-back" href="reel_studio.html">← Studio</a>
+  <div class="hint">Controls sit outside the 1080×1920 frame (screen capture / Reels).</div>
+  <button type="button" class="primary" id="playBtn">▶ Play</button>
+  <button type="button" id="resetBtn">↺ Reset</button>
+  <div class="speed-control">
+    <label>Speed</label>
+    <input type="range" id="speedSlider" min="50" max="800" value="350" aria-label="Animation speed">
+  </div>
+  <label class="sound-row" title="Procedural taps for calls, table reads, table writes">
+    <input type="checkbox" id="soundToggle" checked aria-label="Play sound during visualization">
+    <span>Sound</span>
+  </label>
+  <button type="button" class="record-screen" id="recordScreenBtn">● Record reel</button>
+  <button type="button" id="stopRecordBtn" disabled>■ Stop & save</button>
+  <button type="button" id="reelOnlyBtn" title="Layout with only the reel (clean tab for capture)">⛶ Reel-only view</button>
+  <div class="record-hint" id="recordStatus">Record → exact 1080×1920 (9:16). Upload as a Reel — Feed posts reject full-vertical.</div>
+</aside>
+
+<script src="reel-platform/reel-platform.js"></script>
+<script src="reel-platform/visualizers/tabulation-audio.js"></script>
+<script src="reel-platform/visualizers/tabulation-visualizer.js"></script>
+</body>
+</html>
