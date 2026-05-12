@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memoization vs Tabulation — Same DP, Opposite Direction</title>
+<link rel="stylesheet" href="reel-platform/reel-shell.css">
+<link rel="stylesheet" href="reel-platform/visualizers/memo-tab-reel.css">
+</head>
+<body>
+
+<div class="reel-fit">
+  <div class="reel-scaler-wrap" id="reelScalerWrap">
+    <div class="reel-scaler" id="reelScaler">
+<div class="record-frame-wrapper" id="recordFrameTarget">
+  <div class="record-frame reel-viz-root">
+    <div class="reel-viz-stack">
+    <header class="reel-viz-header">
+      <div class="spark">Two approaches · Same idea</div>
+      <h1>
+        <span class="memo-word">Memoization</span>
+        <span class="vs"> vs </span>
+        <span class="tab-word">Tabulation</span>
+      </h1>
+      <div class="subtitle">fib(9) — top-down with a cache vs bottom-up with a table. Same answer, opposite direction.</div>
+    </header>
+
+    <div class="reel-viz-visualizer panels-row">
+
+      <div class="panel memo-panel">
+        <div class="panel-header">
+          <div class="panel-title-row">
+            <div class="panel-title">Memoization</div>
+            <div class="direction-tag direction-down" aria-hidden="true">top ↓ down</div>
+          </div>
+          <div class="stats">
+            <div class="stat calls"><span class="label">calls </span><span class="value" id="memCalls">0</span></div>
+            <div class="stat hits"><span class="label">hits </span><span class="value" id="memHits">0</span></div>
+            <div class="stat"><span class="label" id="memFibLabel">fib(9)=</span><span class="value" id="memFibVal">?</span></div>
+          </div>
+        </div>
+        <div class="canvas-container memo-canvas-container">
+          <canvas id="memCanvas"></canvas>
+          <div class="memo-strip" id="memoStrip" aria-label="Memo cache contents"></div>
+          <div class="complexity-label">recursive · O(n) · lazy</div>
+        </div>
+        <div class="progress-bar" id="memProgress"></div>
+      </div>
+
+      <div class="panel tab-panel">
+        <div class="panel-header">
+          <div class="panel-title-row">
+            <div class="panel-title">Tabulation</div>
+            <div class="direction-tag direction-up" aria-hidden="true">bottom ↑ up</div>
+          </div>
+          <div class="stats">
+            <div class="stat writes"><span class="label">writes </span><span class="value" id="tabWrites">0</span></div>
+            <div class="stat lookups"><span class="label">i </span><span class="value" id="tabIndex">–</span></div>
+            <div class="stat"><span class="label" id="tabFibLabel">fib(9)=</span><span class="value" id="tabFibVal">?</span></div>
+          </div>
+        </div>
+        <div class="canvas-container tab-canvas-container">
+          <canvas id="tabCanvas"></canvas>
+          <div class="tab-formula" id="tabFormula">for i = 3..n  →  f[i] = f[i-1] + f[i-2]</div>
+          <div class="complexity-label">iterative · O(n) · eager</div>
+        </div>
+        <div class="progress-bar" id="tabProgress"></div>
+      </div>
+
+    </div>
+
+    <section class="reel-viz-explain comparison-table" aria-label="Comparison">
+      <h3>Same DP · Two ways</h3>
+      <div class="table-row header-row">
+        <div></div>
+        <div class="memo-val">Memoization</div>
+        <div class="tab-val">Tabulation</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">direction</div>
+        <div class="memo-val">top → down</div>
+        <div class="tab-val">bottom → up</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">style</div>
+        <div class="memo-val">recursive</div>
+        <div class="tab-val">iterative</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">computes</div>
+        <div class="memo-val">on demand</div>
+        <div class="tab-val">all in order</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">vibe</div>
+        <div class="memo-val">easier to think</div>
+        <div class="tab-val">easier to optimize</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">fib(9) work</div>
+        <div class="memo-val" id="cmpMemoWork">17</div>
+        <div class="tab-val" id="cmpTabWork">9</div>
+      </div>
+    </section>
+
+    <footer class="reel-viz-footer footer-handle">
+      <div class="handle">
+        <span class="sym">@</span><span class="name">dev.hassan.najjar</span>
+      </div>
+    </footer>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<aside class="side-controls" aria-label="Playback controls">
+  <a class="side-controls-back" href="reel_studio.html">← Studio</a>
+  <div class="hint">Controls sit outside the 1080×1920 frame (screen capture / Reels).</div>
+  <button type="button" class="primary" id="playBtn">▶ Play</button>
+  <button type="button" id="resetBtn">↺ Reset</button>
+  <div class="speed-control">
+    <label>Speed</label>
+    <input type="range" id="speedSlider" min="50" max="800" value="350" aria-label="Animation speed">
+  </div>
+  <label class="sound-row" title="Procedural taps for calls, cache hits, and table writes">
+    <input type="checkbox" id="soundToggle" checked aria-label="Play sound during visualization">
+    <span>Sound</span>
+  </label>
+  <button type="button" class="record-screen" id="recordScreenBtn">● Record reel</button>
+  <button type="button" id="stopRecordBtn" disabled>■ Stop & save</button>
+  <button type="button" id="reelOnlyBtn" title="Layout with only the reel (clean tab for capture)">⛶ Reel-only view</button>
+  <div class="record-hint" id="recordStatus">Record → exact 1080×1920 (9:16). Upload as a Reel — Feed posts reject full-vertical.</div>
+</aside>
+
+<script src="reel-platform/reel-platform.js"></script>
+<script src="reel-platform/visualizers/memo-tab-audio.js"></script>
+<script src="reel-platform/visualizers/memo-tab-visualizer.js"></script>
+</body>
+</html>
