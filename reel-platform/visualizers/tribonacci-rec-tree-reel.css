@@ -1,0 +1,176 @@
+/* Recursive Tribonacci: code + ternary recursion tree, line hover sync */
+
+:root {
+  --trec-tree: #22d3ee;
+  --trec-tree-glow: rgba(34, 211, 238, 0.45);
+  --trec-code-acc: #f472b6;
+  --trec-code-glow: rgba(244, 114, 182, 0.35);
+}
+
+.reel-viz-header h1 .trec-title {
+  background: linear-gradient(90deg, var(--trec-code-acc), var(--trec-tree));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 900;
+}
+
+.trec-viz {
+  container-type: size;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+.trec-stats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 16px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: var(--panel);
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(11px, 2.4cqw, 16px);
+}
+
+.trec-stats .label { color: var(--text-dim); margin-right: 6px; font-weight: 600; }
+.trec-stats .value { color: var(--trec-tree); font-weight: 800; text-shadow: 0 0 14px var(--trec-tree-glow); }
+
+.trec-code-tree-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.trec-code-wrap {
+  flex-shrink: 0;
+  border-radius: 13px;
+  border: 1px solid var(--panel-border);
+  background:
+    radial-gradient(ellipse at 100% 0%, rgba(244, 114, 182, 0.12), transparent 55%),
+    var(--panel);
+  padding: 12px 14px;
+}
+
+.trec-code-wrap .code-hint {
+  font-size: clamp(11px, 2.2cqw, 14px);
+  color: var(--text-dim);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.trec-code-wrap .code-hint strong { color: var(--trec-code-acc); }
+
+.trec-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(12px, 2.5cqw, 17px);
+  line-height: 1.58;
+  margin: 0;
+}
+
+.trec-code .code-line {
+  padding: 4px 10px 4px 30px;
+  margin: 3px 0;
+  border-radius: 9px;
+  position: relative;
+  cursor: pointer;
+  color: var(--text-dim);
+  transition: background 0.12s, color 0.12s, box-shadow 0.12s;
+}
+
+.trec-code .code-line::before {
+  content: attr(data-num);
+  position: absolute;
+  left: 7px;
+  top: 4px;
+  font-size: 0.76em;
+  color: var(--text-dim);
+  opacity: 0.55;
+  font-weight: 700;
+  min-width: 1.4em;
+}
+
+.trec-code .code-line:hover,
+.trec-code .code-line.is-hover {
+  color: var(--text);
+  background: rgba(244, 114, 182, 0.12);
+  box-shadow: 0 0 0 1px rgba(244, 114, 182, 0.4);
+}
+
+.trec-code .code-line:hover::before,
+.trec-code .code-line.is-hover::before {
+  color: var(--trec-code-acc);
+  opacity: 1;
+}
+
+.trec-canvas-panel {
+  flex: 1 1 auto;
+  min-height: 280px;
+  border-radius: 13px;
+  border: 1px solid rgba(34, 211, 238, 0.22);
+  background: var(--panel);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.trec-canvas-panel .tree-label {
+  text-align: center;
+  font-size: clamp(10px, 2cqw, 13px);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 8px 8px 2px;
+}
+
+.trec-canvas-panel canvas {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 240px;
+  display: block;
+}
+
+.trec-canvas-panel .complexity-pill {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(9px, 1.9cqw, 12px);
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 77, 109, 0.35);
+  color: #ff6b8a;
+}
+
+.trec-explain {
+  border-radius: 13px;
+  border: 1px solid rgba(167, 139, 250, 0.2);
+  background: rgba(8, 6, 16, 0.65);
+  padding: 12px 14px;
+  font-size: clamp(14px, 3.1cqw, 19px);
+  line-height: 1.45;
+  color: var(--text);
+  min-height: 5em;
+  flex-shrink: 0;
+}
+
+.trec-explain .ex-line {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88em;
+  color: var(--trec-code-acc);
+  margin-bottom: 6px;
+  font-weight: 700;
+}

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tribonacci — line by line + growth graph</title>
+<link rel="stylesheet" href="reel-platform/reel-shell.css">
+<link rel="stylesheet" href="reel-platform/visualizers/fibonacci-reel.css">
+<link rel="stylesheet" href="reel-platform/visualizers/tribonacci-reel.css">
+</head>
+<body>
+
+<div class="reel-fit">
+  <div class="reel-scaler-wrap" id="reelScalerWrap">
+    <div class="reel-scaler" id="reelScaler">
+<div class="record-frame-wrapper" id="recordFrameTarget">
+  <div class="record-frame reel-viz-root tribonacci-page">
+    <div class="reel-viz-stack">
+      <div style="margin-top: 280px;"></div>
+    <header class="reel-viz-header">
+      <div class="spark">Dynamic programming</div>
+      <h1><span class="trib-word">N-th Tribonacci</span></h1>
+    </header>
+
+    <div class="reel-viz-visualizer panels-row trib-panels-row">
+      <div class="panel tribonacci-panel">
+        <div class="panel-header">
+          <div class="panel-title trib-panel-title">Line by line</div>
+          <p class="trib-hero-line" id="tribHeroLine" aria-live="polite">Press Play to step the algorithm — the current line and explanation show here.</p>
+          <div class="trib-chips" id="tribVars"></div>
+          <div class="trib-complexity-row" aria-label="Complexity">
+            <div class="trib-pill trib-pill-time"><span class="pill-label">TIME</span> <span class="pill-big">O(n)</span></div>
+            <div class="trib-pill trib-pill-space"><span class="pill-label">SPACE</span> <span class="pill-big">O(1)</span></div>
+          </div>
+          <div class="stats">
+            <div class="stat"><span class="label">Target</span> <span class="value" id="tribGoal">T(12)</span></div>
+            <div class="stat"><span class="label">Step</span> <span class="value"><span id="tribStepIndex">–</span><span class="step-slash">/</span><span id="tribStepTotal">0</span></span></div>
+            <div class="stat"><span class="label">Answer</span> <span class="value" id="tribResult">…</span></div>
+          </div>
+        </div>
+        <div class="canvas-container trib-chart-canvas-wrap">
+          <div class="trib-chart-head">
+            <span class="trib-chart-title">T(k) at each index k</span>
+            <span class="trib-chart-hint" id="tribChartHint">0…37</span>
+          </div>
+          <canvas id="tribGraph" aria-label="Tribonacci bar chart"></canvas>
+          <div style="margin-top: 20px;"></div>
+          <div class="complexity-label" >Growth up to k = 37</div>
+        </div>
+        <div class="trib-progress-track" aria-hidden="true"><div class="trib-progress-fill" id="tribProgressFill"></div></div>
+      </div>
+    </div>
+
+    <section class="reel-viz-explain comparison-table trib-guide" aria-label="Quick guide">
+      <h3>Quick guide</h3>
+      <div class="table-row">
+        <div class="metric">Recurrence</div>
+        <div class="trib-guide-val">T(k) = T(k−1) + T(k−2) + T(k−3)</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">Bases</div>
+        <div class="trib-guide-val">T(0)=0, T(1)=T(2)=1</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">Work</div>
+        <div class="trib-guide-val">One pass · O(n) time, O(1) space</div>
+      </div>
+    </section>
+
+    <div class="panel trib-code-panel">
+      <div class="trib-ide" id="tribIde">
+        <div class="trib-ide-titlebar">
+          <span class="trib-traffic" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+          <span class="trib-ide-name">tribonacci.js</span>
+        </div>
+        <div class="trib-ide-body">
+          <pre class="trib-code" id="tribCode" aria-label="Tribonacci implementation"></pre>
+        </div>
+      </div>
+    </div>
+
+    <footer class="reel-viz-footer footer-handle">
+      <div class="handle">
+        <span class="sym">@</span><span class="name">dev.hassan.najjar</span>
+      </div>
+    </footer>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<aside class="side-controls" aria-label="Playback controls">
+  <a class="side-controls-back" href="reel_studio.html">← Studio</a>
+  <div class="hint">Controls sit outside the 1080×1920 frame (screen capture / Reels).</div>
+  <div class="param-control">
+    <label for="tribNInput">n · 0–37</label>
+    <input type="number" id="tribNInput" min="0" max="37" value="12" aria-label="Tribonacci index n from 0 to 37">
+  </div>
+  <button type="button" class="primary" id="playBtn">▶ Play</button>
+  <button type="button" id="resetBtn">↺ Reset</button>
+  <div class="speed-control">
+    <label>Speed</label>
+    <input type="range" id="speedSlider" min="50" max="800" value="350" aria-label="Animation speed">
+  </div>
+  <label class="sound-row" title="Soft blip per code line; chord when finished">
+    <input type="checkbox" id="soundToggle" checked aria-label="Play sound during visualization">
+    <span>Sound</span>
+  </label>
+  <button type="button" class="record-screen" id="recordScreenBtn">● Record reel</button>
+  <button type="button" id="stopRecordBtn" disabled>■ Stop & save</button>
+  <button type="button" id="reelOnlyBtn" title="Layout with only the reel (clean tab for capture)">⛶ Reel-only view</button>
+  <div class="record-hint" id="recordStatus">Record → exact 1080×1920 (9:16). Upload as a Reel — Feed posts reject full-vertical.</div>
+</aside>
+
+<script src="reel-platform/reel-platform.js"></script>
+<script src="reel-platform/visualizers/tribonacci-line-audio.js"></script>
+<script src="reel-platform/visualizers/tribonacci-visualizer.js"></script>
+</body>
+</html>

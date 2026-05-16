@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tribonacci — recursive tree &amp; code hover</title>
+<link rel="stylesheet" href="reel-platform/reel-shell.css">
+<link rel="stylesheet" href="reel-platform/visualizers/tribonacci-rec-tree-reel.css">
+</head>
+<body>
+
+<div class="reel-fit">
+  <div class="reel-scaler-wrap" id="reelScalerWrap">
+    <div class="reel-scaler" id="reelScaler">
+<div class="record-frame-wrapper" id="recordFrameTarget">
+  <div class="record-frame reel-viz-root">
+    <div class="reel-viz-stack">
+    <header class="reel-viz-header">
+      <div class="spark">Recursion · same code, exploding calls</div>
+      <h1><span class="trec-title">Tribonacci tree</span></h1>
+      <div class="subtitle">Naive recursion branches three ways. <strong>Hover</strong> each line to see which nodes run that line and what they return. Keep <code>n ≤ 7</code> so the tree fits the frame.</div>
+    </header>
+
+    <div class="reel-viz-visualizer trec-viz">
+      <div class="trec-stats" aria-live="polite">
+        <span><span class="label">n</span><span class="value" id="tribRecNLabel">5</span></span>
+        <span><span class="label">trib(n)</span><span class="value" id="tribRecAnswer">7</span></span>
+        <span><span class="label">nodes</span><span class="value" id="tribRecCount">13</span></span>
+      </div>
+
+      <div class="trec-code-tree-row">
+        <div class="trec-code-wrap">
+          <p class="code-hint"><strong>Hover</strong> a line — the tree highlights every matching <code>trib(…)</code> call; bubbles are return values.</p>
+          <pre class="trec-code" id="tribRecCode" aria-label="Recursive tribonacci"></pre>
+        </div>
+        <div class="trec-canvas-panel">
+          <div class="tree-label">Call graph (naive)</div>
+          <canvas id="tribRecCanvas" aria-label="Recursion tree"></canvas>
+          <div class="complexity-pill" aria-hidden="true">exponential calls</div>
+        </div>
+      </div>
+    </div>
+
+    <section class="reel-viz-explain trec-explain" id="tribRecExplain" aria-live="polite">
+      <span class="ex-line"></span>Hover any line in the code. The tree lights up every call that executes that line, and the bubbles show each call’s return value.
+    </section>
+
+    <footer class="reel-viz-footer footer-handle">
+      <div class="handle">
+        <span class="sym">@</span><span class="name">dev.hassan.najjar</span>
+      </div>
+    </footer>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<aside class="side-controls" aria-label="Playback controls">
+  <a class="side-controls-back" href="reel_studio.html">← Studio</a>
+  <div class="hint">Controls sit outside the 1080×1920 frame (screen capture / Reels).</div>
+  <label style="display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--text-dim);">
+    <span>n (0–7, naive tree)</span>
+    <input type="number" id="tribRecN" min="0" max="7" value="5" style="padding:8px 10px;border-radius:10px;border:1px solid var(--panel-border);background:var(--panel);color:var(--text);font-family:inherit;font-weight:600;">
+  </label>
+  <button type="button" class="primary" id="playBtn">▶ Play tour</button>
+  <button type="button" id="resetBtn">↺ Reset</button>
+  <div class="speed-control">
+    <label>Tour speed</label>
+    <input type="range" id="speedSlider" min="50" max="800" value="350" aria-label="Tour speed">
+  </div>
+  <button type="button" class="record-screen" id="recordScreenBtn">● Record reel</button>
+  <button type="button" id="stopRecordBtn" disabled>■ Stop &amp; save</button>
+  <button type="button" id="reelOnlyBtn" title="Layout with only the reel (clean tab for capture)">⛶ Reel-only view</button>
+  <div class="record-hint" id="recordStatus">Record → exact 1080×1920 (9:16). Upload as a Reel — Feed posts reject full-vertical.</div>
+</aside>
+
+<script src="reel-platform/reel-platform.js"></script>
+<script src="reel-platform/visualizers/tribonacci-rec-tree-visualizer.js"></script>
+</body>
+</html>
