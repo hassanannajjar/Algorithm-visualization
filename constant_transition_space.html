@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Constant Transition — Space Optimization</title>
+<link rel="stylesheet" href="reel-platform/reel-shell.css">
+<link rel="stylesheet" href="reel-platform/visualizers/constant-transition-reel.css">
+</head>
+<body>
+
+<div class="reel-fit">
+  <div class="reel-scaler-wrap" id="reelScalerWrap">
+    <div class="reel-scaler" id="reelScaler">
+<div class="record-frame-wrapper" id="recordFrameTarget">
+  <div class="record-frame reel-viz-root">
+    <div class="reel-viz-stack">
+    <header class="reel-viz-header">
+      <div class="spark">Constant transition pattern</div>
+      <h1>
+        <span class="table-word">O(n) table</span>
+        <span class="vs"> → </span>
+        <span class="vars-word">O(1) vars</span>
+      </h1>
+      <div class="subtitle">f(8) · fixed 2-back window — when the transition is constant, two variables replace the whole array.</div>
+    </header>
+
+    <div class="reel-viz-visualizer panels-row">
+
+      <div class="panel table-panel">
+        <div class="panel-header">
+          <div class="panel-title-row">
+            <div class="panel-title">Full table</div>
+            <div class="space-tag tag-on">O(n) space</div>
+          </div>
+          <div class="stats">
+            <div class="stat"><span class="label">cells </span><span class="value" id="ctoCellsUsed">0</span></div>
+            <div class="stat"><span class="label" id="ctoTblLabel">f(8)=</span><span class="value" id="ctoTblVal">?</span></div>
+          </div>
+        </div>
+        <div class="cto-stage">
+          <div class="cto-grid-head">
+            <div>index</div>
+            <div>stored f(i)</div>
+          </div>
+          <div class="cto-grid" id="ctoGrid"></div>
+          <div class="cto-formula" id="ctoTableFormula">Full array · every f(i) stored</div>
+          <div class="complexity-label">O(n) extra space</div>
+        </div>
+        <div class="progress-bar" id="tblProgress"></div>
+      </div>
+
+      <div class="panel vars-panel">
+        <div class="panel-header">
+          <div class="panel-title-row">
+            <div class="panel-title">Two variables</div>
+            <div class="space-tag tag-o1">O(1) space</div>
+          </div>
+          <div class="stats">
+            <div class="stat"><span class="label">window </span><span class="value">2-back</span></div>
+            <div class="stat"><span class="label" id="ctoVarLabel">f(8)=</span><span class="value" id="ctoVarVal">?</span></div>
+          </div>
+        </div>
+        <div class="cto-var-stage">
+          <div class="cto-window-note">1 step back · 2 back · maybe 3 — here: 2</div>
+          <div class="cto-var-row">
+            <div class="cto-slot" id="ctoSlotA">
+              <div class="slot-label">a</div>
+              <div class="slot-val">·</div>
+            </div>
+            <div class="cto-slot" id="ctoSlotB">
+              <div class="slot-label">b</div>
+              <div class="slot-val">·</div>
+            </div>
+          </div>
+          <div class="cto-next-pill" id="ctoNextPill">next = ?</div>
+          <div class="cto-arrow">↓ shift</div>
+          <div class="cto-formula" id="ctoVarFormula">Only the sliding window</div>
+          <div class="complexity-label">O(1) extra space</div>
+        </div>
+        <div class="progress-bar" id="varProgress"></div>
+      </div>
+
+    </div>
+
+    <section class="reel-viz-explain comparison-table" aria-label="Comparison">
+      <h3>Fixed window → drop the table</h3>
+      <div class="table-row header-row">
+        <div></div>
+        <div class="table-val">O(n) table</div>
+        <div class="vars-val">O(1) vars</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">pattern</div>
+        <div class="table-val">stores all f(i)</div>
+        <div class="vars-val">keeps last 2 only</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">lookback</div>
+        <div class="table-val">1 · 2 · or 3 back</div>
+        <div class="vars-val">same recurrence</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">space</div>
+        <div class="table-val">O(n)</div>
+        <div class="vars-val">O(1)</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">f(8)</div>
+        <div class="table-val" id="cmpTblAns">34</div>
+        <div class="vars-val" id="cmpVarAns">34</div>
+      </div>
+    </section>
+
+    <footer class="reel-viz-footer footer-handle">
+      <div class="handle">
+        <span class="sym">@</span><span class="name">dev.hassan.najjar</span>
+      </div>
+    </footer>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<aside class="side-controls" aria-label="Playback controls">
+  <a class="side-controls-back" href="reel_studio.html">← Studio</a>
+  <div class="hint">Controls sit outside the 1080×1920 frame (screen capture / Reels).</div>
+  <button type="button" class="primary" id="playBtn">▶ Play</button>
+  <button type="button" id="resetBtn">↺ Reset</button>
+  <div class="speed-control">
+    <label>Speed</label>
+    <input type="range" id="speedSlider" min="50" max="800" value="350" aria-label="Animation speed">
+  </div>
+  <label class="sound-row" title="Table fills and variable shifts">
+    <input type="checkbox" id="soundToggle" checked aria-label="Play sound during visualization">
+    <span>Sound</span>
+  </label>
+  <button type="button" class="record-screen" id="recordScreenBtn">● Record reel</button>
+  <button type="button" id="stopRecordBtn" disabled>■ Stop & save</button>
+  <button type="button" id="reelOnlyBtn" title="Layout with only the reel (clean tab for capture)">⛶ Reel-only view</button>
+  <div class="record-hint" id="recordStatus">Record → exact 1080×1920 (9:16). Upload as a Reel — Feed posts reject full-vertical.</div>
+</aside>
+
+<script src="reel-platform/reel-platform.js"></script>
+<script src="reel-platform/visualizers/constant-transition-audio.js"></script>
+<script src="reel-platform/visualizers/constant-transition-visualizer.js"></script>
+</body>
+</html>
