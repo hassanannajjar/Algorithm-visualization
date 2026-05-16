@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Longest Palindromic Subsequence</title>
+<link rel="stylesheet" href="reel-platform/reel-shell.css">
+<link rel="stylesheet" href="reel-platform/visualizers/fibonacci-reel.css">
+<link rel="stylesheet" href="reel-platform/visualizers/lps-reel.css">
+</head>
+<body>
+
+<div class="reel-fit">
+  <div class="reel-scaler-wrap" id="reelScalerWrap">
+    <div class="reel-scaler" id="reelScaler">
+<div class="record-frame-wrapper" id="recordFrameTarget">
+  <div class="record-frame reel-viz-root lps-page">
+    <div class="reel-viz-stack">
+      <div style="margin-top: 280px;"></div>
+    <header class="reel-viz-header">
+      <div class="spark">Practice problem</div>
+      <h1><span class="lps-word">LPS</span></h1>
+      <div class="subtitle"><strong>LPS(s) = LCS(s, reverse(s))</strong>.</div>
+    </header>
+
+    <div class="reel-viz-visualizer panels-row lps-panels-row">
+      <div class="panel lps-panel">
+        <div class="panel-header">
+          <div class="panel-title lps-panel-title">Line by line</div>
+          <p class="lps-hero-line" id="lpsHeroLine" aria-live="polite">Press Play to step the algorithm — the current line and explanation show here.</p>
+          <div class="lps-chips" id="lpsVars"></div>
+          <div class="lps-complexity-row" aria-label="Complexity">
+            <div class="lps-pill lps-pill-time"><span class="pill-label">TIME</span> <span class="pill-big">O(mn)</span></div>
+            <div class="lps-pill lps-pill-space"><span class="pill-label">SPACE</span> <span class="pill-big">O(mn)</span></div>
+          </div>
+          <div class="stats">
+            <div class="stat"><span class="label">Target</span> <span class="value" id="lpsGoal">dp[4][4]</span></div>
+            <div class="stat"><span class="label">Step</span> <span class="value"><span id="lpsStepIndex">–</span><span class="step-slash">/</span><span id="lpsStepTotal">0</span></span></div>
+            <div class="stat"><span class="label">Answer</span> <span class="value" id="lpsResult">…</span></div>
+          </div>
+        </div>
+        <div class="canvas-container lps-chart-canvas-wrap">
+          <div class="lps-chart-head">
+            <span class="lps-chart-title">match ↘ +1 · else max(↑, ←)</span>
+            <span class="lps-chart-hint" id="lpsChartHint">5×5</span>
+          </div>
+          <p class="lps-string-strip" id="lpsStrings">s = <span class="s1">"BBAB"</span> · reverse(s) = <span class="s2">"BABB"</span></p>
+          <p class="lps-grid-legend" id="lpsLegend"><span class="diag">match ↘ +1</span> · <span class="up">↑</span> · <span class="left">←</span></p>
+          <canvas id="lpsGrid" aria-label="LPS via LCS grid"></canvas>
+          <div class="complexity-label">Reuse LCS — not a new table, a new question</div>
+        </div>
+        <div class="lps-progress-track" aria-hidden="true"><div class="lps-progress-fill" id="lpsProgressFill"></div></div>
+      </div>
+    </div>
+
+    <section class="reel-viz-explain comparison-table lps-guide" aria-label="Quick guide">
+      <h3>Quick guide</h3>
+      <div class="table-row">
+        <div class="metric">Recurrence</div>
+        <div class="lps-guide-val">match → dp[i-1][j-1]+1</div>
+      </div>
+      <!-- <div class="table-row">
+        <div class="metric">Trick</div>
+        <motion class="lps-guide-val">LPS(s) = LCS(s, reverse(s))</div>
+      </div> -->
+      <div class="table-row">
+        <div class="metric">Mastery</div>
+        <div class="lps-guide-val">BBAB → LPS length 3 · same LCS table</div>
+      </div>
+    </section>
+
+    <div class="panel lps-code-panel">
+      <div class="lps-ide" id="lpsIde">
+        <div class="lps-ide-titlebar">
+          <span class="lps-traffic" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+          <span class="lps-ide-name">lps.js</span>
+        </div>
+        <div class="lps-ide-body">
+          <pre class="lps-code" id="lpsCode" aria-label="LCS"></pre>
+        </div>
+      </div>
+    </div>
+
+    <footer class="reel-viz-footer footer-handle">
+      <div class="handle">
+        <span class="sym">@</span><span class="name">dev.hassan.najjar</span>
+      </div>
+    </footer>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<aside class="side-controls" aria-label="Playback controls">
+  <a class="side-controls-back" href="reel_studio.html">← Studio</a>
+  <div class="hint">Controls sit outside the 1080×1920 frame (screen capture / Reels).</div>
+  <div class="hint">demo · LPS = LCS(s, rev) = 3</div>
+  <button type="button" class="primary" id="playBtn">▶ Play</button>
+  <button type="button" id="resetBtn">↺ Reset</button>
+  <div class="speed-control">
+    <label>Speed</label>
+    <input type="range" id="speedSlider" min="50" max="800" value="350" aria-label="Animation speed">
+  </div>
+  <label class="sound-row" title="Soft blip per code line; chord when finished">
+    <input type="checkbox" id="soundToggle" checked aria-label="Play sound during visualization">
+    <span>Sound</span>
+  </label>
+  <button type="button" class="record-screen" id="recordScreenBtn">● Record reel</button>
+  <button type="button" id="stopRecordBtn" disabled>■ Stop & save</button>
+  <button type="button" id="reelOnlyBtn" title="Layout with only the reel (clean tab for capture)">⛶ Reel-only view</button>
+  <div class="record-hint" id="recordStatus">Record → exact 1080×1920 (9:16). Upload as a Reel — Feed posts reject full-vertical.</div>
+</aside>
+
+<script src="reel-platform/reel-platform.js"></script>
+<script src="reel-platform/visualizers/lps-line-audio.js"></script>
+<script src="reel-platform/visualizers/lps-visualizer.js"></script>
+</body>
+</html>
