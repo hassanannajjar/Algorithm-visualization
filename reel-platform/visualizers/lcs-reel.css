@@ -1,0 +1,237 @@
+/* Longest Common Subsequence — two-sequence 2D DP */
+
+:root {
+  --lcs-accent: #2dd4bf;
+  --lcs-glow: rgba(45, 212, 191, 0.45);
+  --lcs-diag: #4ade80;
+  --lcs-diag-glow: rgba(74, 222, 128, 0.4);
+  --lcs-up: #f472b6;
+  --lcs-left: #a78bfa;
+}
+
+.record-frame.lcs-page { justify-content: flex-start; }
+.lcs-page .reel-viz-stack { flex: 1 1 auto; min-height: 0; width: 100%; }
+
+.lcs-panels-row.panels-row {
+  grid-template-columns: 1fr;
+  height: min(700px, 74cqh);
+  min-height: 420px;
+  max-height: 800px;
+}
+
+.lcs-panel-title {
+  color: var(--lcs-accent);
+  text-shadow: 0 0 20px var(--lcs-glow);
+}
+
+.lcs-panel .panel-header .stats { justify-content: center; }
+.lcs-panel .panel-header .stats .stat .value {
+  color: var(--lcs-accent);
+  text-shadow: 0 0 14px var(--lcs-glow);
+}
+
+.lcs-hero-line {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(12px, 2.65cqw, 17px);
+  font-weight: 600;
+  line-height: 1.5;
+  color: rgba(236, 240, 255, 0.94);
+  margin: 0 0 8px;
+  min-height: 2.75em;
+  text-align: center;
+}
+
+.lcs-chips {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(11px, 2.2cqw, 15px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-bottom: 12px;
+  justify-content: center;
+  color: var(--text-dim);
+}
+.lcs-chips:empty { display: none; }
+.lcs-chips span.val { color: var(--green); font-weight: 700; }
+.lcs-chips .ref-diag { color: var(--lcs-diag); }
+.lcs-chips .ref-up { color: var(--lcs-up); }
+.lcs-chips .ref-left { color: var(--lcs-left); }
+.lcs-chips .chip-match {
+  color: #bbf7d0;
+  font-weight: 800;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(74, 222, 128, 0.15);
+  border: 1px solid rgba(74, 222, 128, 0.45);
+}
+
+.lcs-complexity-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 14px; }
+.lcs-pill {
+  font-family: 'JetBrains Mono', monospace;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.lcs-pill-time {
+  background: linear-gradient(145deg, rgba(255, 77, 109, 0.22), rgba(40, 12, 24, 0.9));
+  border-color: rgba(255, 77, 109, 0.4);
+  color: #ffb3c1;
+}
+.lcs-pill-space {
+  background: linear-gradient(145deg, rgba(59, 130, 246, 0.2), rgba(12, 24, 48, 0.88));
+  border-color: rgba(96, 165, 250, 0.38);
+  color: #bfdbfe;
+}
+
+.lcs-progress-track {
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  margin-top: 8px;
+}
+.lcs-progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2dd4bf, #4ade80, #a78bfa);
+  box-shadow: 0 0 12px var(--lcs-glow);
+  transition: width 0.12s ease-out;
+}
+
+.lcs-chart-canvas-wrap { display: flex; flex-direction: column; min-height: 0; }
+.lcs-panel .canvas-container {
+  background: radial-gradient(ellipse at 20% 0%, rgba(45, 212, 191, 0.1), transparent 55%),
+              radial-gradient(ellipse at 90% 100%, rgba(167, 139, 250, 0.08), transparent 55%),
+              rgba(6, 4, 12, 0.92);
+}
+.lcs-chart-canvas-wrap canvas#lcsGrid {
+  flex: 1 1 auto;
+  min-height: 220px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.lcs-chart-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  padding: 0 2px;
+}
+.lcs-chart-title {
+  font-size: clamp(11px, 2.3cqw, 14px);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(210, 218, 240, 0.92);
+}
+.lcs-chart-hint {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(11px, 2.2cqw, 14px);
+  font-weight: 800;
+  color: rgba(200, 210, 235, 0.9);
+}
+
+.lcs-string-strip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(10px, 2.15cqw, 13px);
+  text-align: center;
+  margin-bottom: 6px;
+  color: rgba(200, 210, 235, 0.88);
+  font-weight: 600;
+}
+.lcs-string-strip .s1 { color: var(--lcs-up); }
+.lcs-string-strip .s2 { color: var(--lcs-left); }
+
+.lcs-grid-legend {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(10px, 2.1cqw, 13px);
+  text-align: center;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.lcs-grid-legend .diag { color: var(--lcs-diag); }
+.lcs-grid-legend .up { color: var(--lcs-up); }
+.lcs-grid-legend .left { color: var(--lcs-left); }
+
+.lcs-guide .table-row { grid-template-columns: 1fr 1.35fr; }
+.lcs-guide-val {
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: clamp(13px, 3cqw, 18px);
+  color: var(--accent);
+}
+
+.lcs-code-panel { flex-shrink: 0; width: 100%; padding: 0; overflow: hidden; }
+.lcs-ide {
+  border-radius: 13px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #0c0b12;
+}
+.lcs-ide-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 8px;
+  background: linear-gradient(180deg, #16141f, #0f0e16);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.lcs-traffic { display: flex; gap: 7px; }
+.lcs-traffic i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+.lcs-traffic .r { background: #ff6b6b; }
+.lcs-traffic .y { background: #ffd43b; }
+.lcs-traffic .g { background: #69db7c; }
+.lcs-ide-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(11px, 2.2cqw, 14px);
+  color: rgba(200, 205, 235, 0.55);
+  font-weight: 700;
+}
+.lcs-ide-body { padding: 8px 4px 12px 0; background: #08070d; }
+.lcs-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(10px, 2.3cqw, 15px);
+  line-height: 1.58;
+  margin: 0;
+  counter-reset: lcsline;
+}
+.lcs-code .code-line {
+  padding: 3px 12px 3px 44px;
+  margin: 1px 0;
+  position: relative;
+  color: rgba(170, 175, 205, 0.88);
+  border-left: 3px solid transparent;
+  border-radius: 0 8px 8px 0;
+}
+.lcs-code .code-line::before {
+  counter-increment: lcsline;
+  content: counter(lcsline);
+  position: absolute;
+  left: 10px;
+  width: 22px;
+  text-align: right;
+  font-size: 0.72em;
+  color: rgba(110, 108, 140, 0.65);
+}
+.lcs-code .code-line.active {
+  color: #f8fafc;
+  border-left-color: #4ade80;
+  background: linear-gradient(90deg, rgba(74, 222, 128, 0.18), transparent);
+}
+
+.reel-viz-header h1 .lcs-word {
+  background: linear-gradient(92deg, #2dd4bf, #4ade80, #a78bfa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 24px var(--lcs-glow));
+}
+.reel-viz-header .subtitle strong { color: #2dd4bf; font-weight: 800; }
+
+.lcs-panel .step-slash { opacity: 0.45; margin: 0 2px; }
