@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Longest Increasing Subsequence</title>
+<link rel="stylesheet" href="reel-platform/reel-shell.css">
+<link rel="stylesheet" href="reel-platform/visualizers/fibonacci-reel.css">
+<link rel="stylesheet" href="reel-platform/visualizers/lis-reel.css">
+</head>
+<body>
+
+<div class="reel-fit">
+  <div class="reel-scaler-wrap" id="reelScalerWrap">
+    <div class="reel-scaler" id="reelScaler">
+<div class="record-frame-wrapper" id="recordFrameTarget">
+  <div class="record-frame reel-viz-root lis-page">
+    <div class="reel-viz-stack">
+      <div style="margin-top: 280px;"></div>
+    <header class="reel-viz-header">
+      <div class="spark">Practice problem</div>
+      <h1><span class="lis-word">LIS</span></h1>
+      <div class="subtitle">Every element <strong>larger than the previous</strong> — check all j before i.</div>
+    </header>
+
+    <div class="reel-viz-visualizer panels-row lis-panels-row">
+      <div class="panel lis-panel">
+        <div class="panel-header">
+          <div class="panel-title lis-panel-title">Line by line</div>
+          <p class="lis-hero-line" id="lisHeroLine" aria-live="polite">Press Play to step the algorithm — the current line and explanation show here.</p>
+          <div class="lis-chips" id="lisVars"></div>
+          <div class="lis-complexity-row" aria-label="Complexity">
+            <div class="lis-pill lis-pill-time"><span class="pill-label">TIME</span> <span class="pill-big">O(n²)</span></div>
+            <div class="lis-pill lis-pill-space"><span class="pill-label">SPACE</span> <span class="pill-big">O(n)</span></div>
+          </div>
+          <div class="stats">
+            <div class="stat"><span class="label">Target</span> <span class="value" id="lisGoal">max(dp)</span></div>
+            <div class="stat"><span class="label">Step</span> <span class="value"><span id="lisStepIndex">–</span><span class="step-slash">/</span><span id="lisStepTotal">0</span></span></div>
+            <div class="stat"><span class="label">Answer</span> <span class="value" id="lisResult">…</span></div>
+          </div>
+        </div>
+        <div class="canvas-container lis-chart-canvas-wrap">
+          <div class="lis-chart-head">
+            <span class="lis-chart-title">dp[i] length · teal = nums[i]</span>
+            <span class="lis-chart-hint" id="lisChartHint">0…3</span>
+          </div>
+          <div class="lis-nums-strip" id="lisNumsStrip" aria-live="polite"></div>
+          <canvas id="lisGraph" aria-label="LIS DP bar chart"></canvas>
+          <div class="complexity-label">Non-constant transition — dp[i] = max(dp[j]+1)</div>
+        </div>
+        <div class="lis-progress-track" aria-hidden="true"><div class="lis-progress-fill" id="lisProgressFill"></div></div>
+      </div>
+    </div>
+
+    <section class="reel-viz-explain comparison-table lis-guide" aria-label="Quick guide">
+      <h3>Quick guide</h3>
+      <div class="table-row">
+        <div class="metric">Recurrence</div>
+        <div class="lis-guide-val">dp[i] = max(dp[j]+1) if nums[j]<nums[i]</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">Choices</div>
+        <div class="lis-guide-val">At each i: scan every j < i</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">Work</div>
+        <div class="lis-guide-val">Brute force obvious · DP insight isn't</div>
+      </div>
+    </section>
+
+    <div class="panel lis-code-panel">
+      <div class="lis-ide" id="lisIde">
+        <div class="lis-ide-titlebar">
+          <span class="lis-traffic" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+          <span class="lis-ide-name">lengthOfLIS.js</span>
+        </div>
+        <div class="lis-ide-body">
+          <pre class="lis-code" id="lisCode" aria-label="Longest increasing subsequence"></pre>
+        </div>
+      </div>
+    </div>
+
+    <footer class="reel-viz-footer footer-handle">
+      <div class="handle">
+        <span class="sym">@</span><span class="name">dev.hassan.najjar</span>
+      </div>
+    </footer>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<aside class="side-controls" aria-label="Playback controls">
+  <a class="side-controls-back" href="reel_studio.html">← Studio</a>
+  <div class="hint">Controls sit outside the 1080×1920 frame (screen capture / Reels).</div>
+  <div class="hint">demo · [1,3,2,4] → LIS length 3</div>
+  <button type="button" class="primary" id="playBtn">▶ Play</button>
+  <button type="button" id="resetBtn">↺ Reset</button>
+  <div class="speed-control">
+    <label>Speed</label>
+    <input type="range" id="speedSlider" min="50" max="800" value="350" aria-label="Animation speed">
+  </div>
+  <label class="sound-row" title="Soft blip per code line; chord when finished">
+    <input type="checkbox" id="soundToggle" checked aria-label="Play sound during visualization">
+    <span>Sound</span>
+  </label>
+  <button type="button" class="record-screen" id="recordScreenBtn">● Record reel</button>
+  <button type="button" id="stopRecordBtn" disabled>■ Stop & save</button>
+  <button type="button" id="reelOnlyBtn" title="Layout with only the reel (clean tab for capture)">⛶ Reel-only view</button>
+  <div class="record-hint" id="recordStatus">Record → exact 1080×1920 (9:16). Upload as a Reel — Feed posts reject full-vertical.</div>
+</aside>
+
+<script src="reel-platform/reel-platform.js"></script>
+<script src="reel-platform/visualizers/lis-line-audio.js"></script>
+<script src="reel-platform/visualizers/lis-visualizer.js"></script>
+</body>
+</html>
