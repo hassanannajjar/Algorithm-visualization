@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Min Cost Climbing Stairs — line by line</title>
+<link rel="stylesheet" href="reel-platform/reel-shell.css">
+<link rel="stylesheet" href="reel-platform/visualizers/fibonacci-reel.css">
+<link rel="stylesheet" href="reel-platform/visualizers/min-cost-stairs-reel.css">
+</head>
+<body>
+
+<div class="reel-fit">
+  <div class="reel-scaler-wrap" id="reelScalerWrap">
+    <div class="reel-scaler" id="reelScaler">
+<div class="record-frame-wrapper" id="recordFrameTarget">
+  <div class="record-frame reel-viz-root mcs-page">
+    <div class="reel-viz-stack">
+      <div style="margin-top: 280px;"></div>
+    <header class="reel-viz-header">
+      <div class="spark">Day 11 · Optimization</div>
+      <h1><span class="mcs-word">Min Cost Climbing Stairs</span></h1>
+      <div class="subtitle">Same staircase — <strong>minimize</strong> cost, not count ways.</div>
+    </header>
+
+    <div class="reel-viz-visualizer panels-row mcs-panels-row">
+      <div class="panel mcs-panel">
+        <div class="panel-header">
+          <div class="panel-title mcs-panel-title">Line by line</div>
+          <p class="mcs-hero-line" id="mcsHeroLine" aria-live="polite">Press Play to step the algorithm — the current line and explanation show here.</p>
+          <div class="mcs-chips" id="mcsVars"></div>
+          <div class="mcs-complexity-row" aria-label="Complexity">
+            <div class="mcs-pill mcs-pill-time"><span class="pill-label">TIME</span> <span class="pill-big">O(n)</span></div>
+            <div class="mcs-pill mcs-pill-space"><span class="pill-label">SPACE</span> <span class="pill-big">O(1)</span></div>
+          </div>
+          <div class="stats">
+            <div class="stat"><span class="label">Target</span> <span class="value" id="mcsGoal">f(6)</span></div>
+            <div class="stat"><span class="label">Step</span> <span class="value"><span id="mcsStepIndex">–</span><span class="step-slash">/</span><span id="mcsStepTotal">0</span></span></div>
+            <div class="stat"><span class="label">Answer</span> <span class="value" id="mcsResult">…</span></div>
+          </div>
+        </div>
+        <div class="canvas-container mcs-chart-canvas-wrap">
+          <div class="mcs-chart-head">
+            <span class="mcs-chart-title">f(i) min cost · orange = step cost</span>
+            <span class="mcs-chart-hint" id="mcsChartHint">0…6</span>
+          </div>
+          <div class="mcs-cost-strip" id="mcsCostStrip" aria-live="polite"></div>
+          <canvas id="mcsGraph" aria-label="Min cost DP bar chart"></canvas>
+          <div style="margin-top: 20px;"></div>
+          <div class="complexity-label" >Reach the top with minimum total cost</div>
+        </div>
+        <div class="mcs-progress-track" aria-hidden="true"><div class="mcs-progress-fill" id="mcsProgressFill"></div></div>
+      </div>
+    </div>
+
+    <section class="reel-viz-explain comparison-table mcs-guide" aria-label="Quick guide">
+      <h3>Quick guide</h3>
+      <div class="table-row">
+        <div class="metric">Recurrence</div>
+        <div class="mcs-guide-val">f(i) = min(f(i−1)+cost[i−1], f(i−2)+cost[i−2])</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">Shift</div>
+        <div class="mcs-guide-val">Before: count ways · Now: minimize cost</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">Work</div>
+        <div class="mcs-guide-val">Minimize cost · O(n) time, O(1) space</div>
+      </div>
+    </section>
+
+    <div class="panel mcs-code-panel">
+      <div class="mcs-ide" id="mcsIde">
+        <div class="mcs-ide-titlebar">
+          <span class="mcs-traffic" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+          <span class="mcs-ide-name">minCostStairs.js</span>
+        </div>
+        <div class="mcs-ide-body">
+          <pre class="mcs-code" id="mcsCode" aria-label="Min cost climbing stairs implementation"></pre>
+        </div>
+      </div>
+    </div>
+
+    <footer class="reel-viz-footer footer-handle">
+      <div class="handle">
+        <span class="sym">@</span><span class="name">dev.hassan.najjar</span>
+      </div>
+    </footer>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<aside class="side-controls" aria-label="Playback controls">
+  <a class="side-controls-back" href="reel_studio.html">← Studio</a>
+  <div class="hint">Controls sit outside the 1080×1920 frame (screen capture / Reels).</div>
+  <div class="param-control">
+    <label for="mcsTopInput">top · 0–6</label>
+    <input type="number" id="mcsTopInput" min="0" max="6" value="6" aria-label="Top step index 0 to cost.length">
+  </div>
+  <button type="button" class="primary" id="playBtn">▶ Play</button>
+  <button type="button" id="resetBtn">↺ Reset</button>
+  <div class="speed-control">
+    <label>Speed</label>
+    <input type="range" id="speedSlider" min="50" max="800" value="350" aria-label="Animation speed">
+  </div>
+  <label class="sound-row" title="Soft blip per code line; chord when finished">
+    <input type="checkbox" id="soundToggle" checked aria-label="Play sound during visualization">
+    <span>Sound</span>
+  </label>
+  <button type="button" class="record-screen" id="recordScreenBtn">● Record reel</button>
+  <button type="button" id="stopRecordBtn" disabled>■ Stop & save</button>
+  <button type="button" id="reelOnlyBtn" title="Layout with only the reel (clean tab for capture)">⛶ Reel-only view</button>
+  <div class="record-hint" id="recordStatus">Record → exact 1080×1920 (9:16). Upload as a Reel — Feed posts reject full-vertical.</div>
+</aside>
+
+<script src="reel-platform/reel-platform.js"></script>
+<script src="reel-platform/visualizers/min-cost-stairs-line-audio.js"></script>
+<script src="reel-platform/visualizers/min-cost-stairs-visualizer.js"></script>
+</body>
+</html>
