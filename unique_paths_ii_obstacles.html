@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unique Paths II — Obstacles</title>
+<link rel="stylesheet" href="reel-platform/reel-shell.css">
+<link rel="stylesheet" href="reel-platform/visualizers/fibonacci-reel.css">
+<link rel="stylesheet" href="reel-platform/visualizers/grid-dp-reel.css">
+<link rel="stylesheet" href="reel-platform/visualizers/grid-obstacles-reel.css">
+</head>
+<body>
+
+<div class="reel-fit">
+  <div class="reel-scaler-wrap" id="reelScalerWrap">
+    <div class="reel-scaler" id="reelScaler">
+<div class="record-frame-wrapper" id="recordFrameTarget">
+  <div class="record-frame reel-viz-root up2-page">
+    <div class="reel-viz-stack">
+      <div style="margin-top: 280px;"></div>
+    <header class="reel-viz-header">
+      <div class="spark">Practice problem</div>
+      <h1><span class="up2-word">Unique Paths II</span></h1>
+      <div class="subtitle">Same grid · same robot · <strong>blocked cells = 0 paths</strong>.</div>
+    </header>
+
+    <div class="reel-viz-visualizer panels-row up2-panels-row">
+      <div class="panel up2-panel">
+        <div class="panel-header">
+          <div class="panel-title up2-panel-title">Line by line</div>
+          <p class="up2-hero-line" id="up2HeroLine" aria-live="polite">Press Play to step the algorithm — the current line and explanation show here.</p>
+          <div class="up2-chips" id="up2Vars"></div>
+          <div class="up2-complexity-row" aria-label="Complexity">
+            <div class="up2-pill up2-pill-time"><span class="pill-label">TIME</span> <span class="pill-big">O(mn)</span></div>
+            <div class="up2-pill up2-pill-space"><span class="pill-label">SPACE</span> <span class="pill-big">O(mn)</span></div>
+          </div>
+          <div class="stats">
+            <div class="stat"><span class="label">Target</span> <span class="value" id="up2Goal">dp[2][3]</span></div>
+            <div class="stat"><span class="label">Step</span> <span class="value"><span id="up2StepIndex">–</span><span class="step-slash">/</span><span id="up2StepTotal">0</span></span></div>
+            <div class="stat"><span class="label">Answer</span> <span class="value" id="up2Result">…</span></div>
+          </div>
+        </div>
+        <div class="canvas-container up2-chart-canvas-wrap">
+          <div class="up2-chart-head">
+            <span class="up2-chart-title">✕ = obstacle · ↑ + ← when clear</span>
+            <span class="up2-chart-hint" id="up2ChartHint">3×4</span>
+          </div>
+          <p class="up2-grid-legend" id="up2Legend">↑ above · ← left · <span class="block">✕ obstacle → 0</span></p>
+          <canvas id="up2Grid" aria-label="Unique Paths II grid"></canvas>
+          <div style="margin-top: 20px;"></div>
+          <div class="complexity-label" >Constraints don't break DP — one more condition</div>
+        </div>
+        <div class="up2-progress-track" aria-hidden="true"><div class="up2-progress-fill" id="up2ProgressFill"></div></div>
+      </div>
+    </div>
+
+    <section class="reel-viz-explain comparison-table up2-guide" aria-label="Quick guide">
+      <h3>Quick guide</h3>
+      <div class="table-row">
+        <div class="metric">Recurrence</div>
+        <div class="up2-guide-val">blocked → 0 · else ↑ + ←</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">Moves</div>
+        <div class="up2-guide-val">Obstacle → 0 · clear → sum neighbors</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">Demo</div>
+        <div class="up2-guide-val">3×4 demo · block at (1,1)</div>
+      </div>
+    </section>
+
+    <div class="panel up2-code-panel">
+      <div class="up2-ide" id="up2Ide">
+        <div class="up2-ide-titlebar">
+          <span class="up2-traffic" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+          <span class="up2-ide-name">uniquePathsII.js</span>
+        </div>
+        <div class="up2-ide-body">
+          <pre class="up2-code" id="up2Code" aria-label="Unique Paths II"></pre>
+        </div>
+      </div>
+    </div>
+
+    <footer class="reel-viz-footer footer-handle">
+      <div class="handle">
+        <span class="sym">@</span><span class="name">dev.hassan.najjar</span>
+      </div>
+    </footer>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<aside class="side-controls" aria-label="Playback controls">
+  <a class="side-controls-back" href="reel_studio.html">← Studio</a>
+  <div class="hint">Controls sit outside the 1080×1920 frame (screen capture / Reels).</div>
+  <div class="hint">3×4 grid · obstacle at (1,1)</div>
+  <button type="button" class="primary" id="playBtn">▶ Play</button>
+  <button type="button" id="resetBtn">↺ Reset</button>
+  <div class="speed-control">
+    <label>Speed</label>
+    <input type="range" id="speedSlider" min="50" max="800" value="350" aria-label="Animation speed">
+  </div>
+  <label class="sound-row" title="Soft blip per code line; chord when finished">
+    <input type="checkbox" id="soundToggle" checked aria-label="Play sound during visualization">
+    <span>Sound</span>
+  </label>
+  <button type="button" class="record-screen" id="recordScreenBtn">● Record reel</button>
+  <button type="button" id="stopRecordBtn" disabled>■ Stop & save</button>
+  <button type="button" id="reelOnlyBtn" title="Layout with only the reel (clean tab for capture)">⛶ Reel-only view</button>
+  <div class="record-hint" id="recordStatus">Record → exact 1080×1920 (9:16). Upload as a Reel — Feed posts reject full-vertical.</div>
+</aside>
+
+<script src="reel-platform/reel-platform.js"></script>
+<script src="reel-platform/visualizers/grid-obstacles-line-audio.js"></script>
+<script src="reel-platform/visualizers/grid-obstacles-visualizer.js"></script>
+</body>
+</html>
