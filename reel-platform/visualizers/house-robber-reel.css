@@ -1,0 +1,374 @@
+/* House Robber — shares Fibonacci reel layout with tribonacci line-by-line. */
+
+:root {
+  --hr-accent: #a78bfa;
+  --hr-accent-soft: rgba(167, 139, 250, 0.18);
+  --hr-glow: rgba(167, 139, 250, 0.5);
+  --hr-loot: rgba(251, 146, 60, 0.85);
+  --hr-loot-dim: rgba(251, 146, 60, 0.35);
+  --hr-ide-green: #4ade80;
+  --hr-ide-green-glow: rgba(74, 222, 128, 0.45);
+}
+
+.record-frame.hr-page {
+  justify-content: flex-start;
+}
+
+.hr-page .reel-viz-stack {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+}
+
+.hr-panels-row.panels-row {
+  grid-template-columns: 1fr;
+  height: min(680px, 72cqh);
+  min-height: 400px;
+  max-height: 780px;
+}
+
+.hr-panel-title {
+  color: var(--hr-accent);
+  text-shadow: 0 0 20px var(--hr-glow);
+}
+
+.hr-panel .panel-header .stats {
+  justify-content: center;
+}
+
+.hr-panel .panel-header .stats .stat .value {
+  color: var(--hr-accent);
+  text-shadow: 0 0 14px var(--hr-glow);
+}
+
+.hr-panel .step-slash {
+  opacity: 0.45;
+  margin: 0 2px;
+}
+
+.hr-chart-canvas-wrap {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.hr-panel .canvas-container {
+  background: radial-gradient(ellipse at 50% 0%, rgba(251, 191, 36, 0.12), transparent 58%),
+              radial-gradient(ellipse at 50% 100%, rgba(56, 189, 248, 0.07), transparent 55%),
+              rgba(6, 4, 12, 0.92);
+}
+
+.hr-chart-canvas-wrap canvas#hrGraph {
+  flex: 1 1 auto;
+  min-height: 180px;
+  height: auto;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.hr-guide .table-row {
+  grid-template-columns: 1fr 1.35fr;
+}
+
+.hr-panel .panel-header {
+  text-align: center;
+}
+
+.hr-panel .hr-chips {
+  justify-content: center;
+}
+
+.hr-guide .table-row:last-child {
+  border-bottom: none;
+}
+
+.hr-guide-val {
+  text-align: center;
+  align-self: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  font-size: clamp(13px, 3cqw, 18px);
+  color: var(--accent);
+}
+
+.hr-code-panel {
+  flex-shrink: 0;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
+.hr-code-panel .hr-ide {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.hr-hero-line {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(12px, 2.65cqw, 17px);
+  font-weight: 600;
+  line-height: 1.5;
+  color: rgba(236, 240, 255, 0.94);
+  margin: 0 0 8px;
+  min-height: 2.75em;
+  letter-spacing: -0.01em;
+}
+
+.hr-chips {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(11px, 2.2cqw, 15px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-bottom: 12px;
+  min-height: 0;
+  color: var(--text-dim);
+}
+
+.hr-chips:empty {
+  display: none;
+}
+
+.hr-chips span.val {
+  color: var(--green);
+  font-weight: 700;
+}
+
+.hr-complexity-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 14px;
+  flex-shrink: 0;
+}
+
+.hr-pill {
+  font-family: 'JetBrains Mono', monospace;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.hr-pill .pill-label {
+  font-size: clamp(10px, 2cqw, 12px);
+  opacity: 0.85;
+}
+
+.hr-pill .pill-big {
+  font-size: clamp(16px, 3.6cqw, 24px);
+  font-weight: 900;
+}
+
+.hr-pill-time {
+  background: linear-gradient(145deg, rgba(255, 77, 109, 0.22), rgba(40, 12, 24, 0.9));
+  border-color: rgba(255, 77, 109, 0.4);
+  color: #ffb3c1;
+  box-shadow: 0 0 28px rgba(255, 77, 109, 0.12);
+}
+
+.hr-pill-time .pill-big {
+  color: #ff6b8a;
+  text-shadow: 0 0 18px rgba(255, 77, 109, 0.45);
+}
+
+.hr-pill-space {
+  background: linear-gradient(145deg, rgba(59, 130, 246, 0.2), rgba(12, 24, 48, 0.88));
+  border-color: rgba(96, 165, 250, 0.38);
+  color: #bfdbfe;
+  box-shadow: 0 0 28px rgba(59, 130, 246, 0.12);
+}
+
+.hr-pill-space .pill-big {
+  color: #93c5fd;
+  text-shadow: 0 0 18px rgba(59, 130, 246, 0.4);
+}
+
+.hr-progress-track {
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+
+.hr-progress-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #a78bfa, #4ade80, #22d3ee);
+  box-shadow: 0 0 12px rgba(251, 191, 36, 0.55);
+  transition: width 0.12s ease-out;
+}
+
+.hr-chart-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  padding: 0 2px;
+}
+
+.hr-chart-title {
+  font-size: clamp(11px, 2.3cqw, 14px);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(210, 218, 240, 0.92);
+}
+
+.hr-chart-hint {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(11px, 2.2cqw, 14px);
+  color: rgba(200, 210, 235, 0.9);
+  font-weight: 800;
+}
+
+.hr-loot-strip,
+.hr-cost-strip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(10px, 2.1cqw, 13px);
+  color: rgba(251, 191, 36, 0.92);
+  text-align: center;
+  margin-bottom: 6px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.hr-ide {
+  flex-shrink: 0;
+  border-radius: 13px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  background: #0c0b12;
+}
+
+.hr-ide-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px 8px;
+  background: linear-gradient(180deg, #16141f 0%, #0f0e16 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hr-traffic {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+
+.hr-traffic i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: block;
+}
+
+.hr-traffic .r { background: linear-gradient(145deg, #ff6b6b, #c92a2a); }
+.hr-traffic .y { background: linear-gradient(145deg, #ffd43b, #f59f00); }
+.hr-traffic .g { background: linear-gradient(145deg, #69db7c, #2f9e44); }
+
+.hr-ide-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(11px, 2.2cqw, 14px);
+  font-weight: 700;
+  color: rgba(200, 205, 235, 0.55);
+  letter-spacing: 0.02em;
+}
+
+.hr-ide-body {
+  padding: 8px 4px 12px 0;
+  background: #08070d;
+}
+
+.hr-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(11px, 2.45cqw, 16px);
+  line-height: 1.62;
+  margin: 0;
+  counter-reset: hrline;
+}
+
+.hr-code .code-line {
+  padding: 3px 12px 3px 44px;
+  margin: 1px 0;
+  position: relative;
+  color: rgba(170, 175, 205, 0.88);
+  border-left: 3px solid transparent;
+  border-radius: 0 8px 8px 0;
+  transition: background 0.12s, border-color 0.12s, color 0.12s, box-shadow 0.12s;
+}
+
+.hr-code .code-line::before {
+  counter-increment: hrline;
+  content: counter(hrline);
+  position: absolute;
+  left: 10px;
+  top: 3px;
+  width: 22px;
+  text-align: right;
+  font-size: 0.72em;
+  color: rgba(110, 108, 140, 0.65);
+  font-weight: 600;
+}
+
+.hr-code .code-line.active {
+  color: #f8fafc;
+  border-left-color: var(--hr-ide-green);
+  background: linear-gradient(90deg, rgba(74, 222, 128, 0.18), rgba(74, 222, 128, 0.02));
+  box-shadow: inset 0 0 32px rgba(74, 222, 128, 0.08);
+}
+
+.hr-code .code-line.active::before {
+  color: var(--hr-ide-green);
+  text-shadow: 0 0 10px var(--hr-ide-green-glow);
+}
+
+.reel-viz-header h1 .hr-word {
+  background: linear-gradient(92deg, #a78bfa, #4ade80, #22d3ee);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 0 24px rgba(251, 191, 36, 0.35));
+}
+
+.reel-viz-header .subtitle strong {
+  color: #fbbf24;
+  font-weight: 800;
+}
+
+.hr-decision-chip {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 900;
+  font-size: clamp(11px, 2.3cqw, 14px);
+  letter-spacing: 0.12em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.hr-decision-chip.rob {
+  color: #bbf7d0;
+  background: rgba(74, 222, 128, 0.2);
+  border: 1px solid rgba(74, 222, 128, 0.5);
+  box-shadow: 0 0 14px rgba(74, 222, 128, 0.25);
+}
+.hr-decision-chip.skip {
+  color: #bfdbfe;
+  background: rgba(96, 165, 250, 0.15);
+  border: 1px solid rgba(96, 165, 250, 0.4);
+}
+.hr-chips .pick-rob { color: #4ade80; }
+.hr-chips .pick-skip { color: #93c5fd; }

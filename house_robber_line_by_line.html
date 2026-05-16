@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>House Robber — line by line</title>
+<link rel="stylesheet" href="reel-platform/reel-shell.css">
+<link rel="stylesheet" href="reel-platform/visualizers/fibonacci-reel.css">
+<link rel="stylesheet" href="reel-platform/visualizers/house-robber-reel.css">
+</head>
+<body>
+
+<div class="reel-fit">
+  <div class="reel-scaler-wrap" id="reelScalerWrap">
+    <div class="reel-scaler" id="reelScaler">
+<div class="record-frame-wrapper" id="recordFrameTarget">
+  <div class="record-frame reel-viz-root hr-page">
+    <div class="reel-viz-stack">
+      <div style="margin-top: 280px;"></div>
+    <header class="reel-viz-header">
+      <div class="spark">Practice problem</div>
+      <h1><span class="hr-word">House Robber</span></h1>
+      <div class="subtitle">Max money · <strong>no two adjacent</strong> houses — a real decision every step.</div>
+    </header>
+
+    <div class="reel-viz-visualizer panels-row hr-panels-row">
+      <div class="panel hr-panel">
+        <div class="panel-header">
+          <div class="panel-title hr-panel-title">Line by line</div>
+          <p class="hr-hero-line" id="hrHeroLine" aria-live="polite">Press Play to step the algorithm — the current line and explanation show here.</p>
+          <div class="hr-chips" id="hrVars"></div>
+          <div class="hr-complexity-row" aria-label="Complexity">
+            <div class="hr-pill hr-pill-time"><span class="pill-label">TIME</span> <span class="pill-big">O(n)</span></div>
+            <div class="hr-pill hr-pill-space"><span class="pill-label">SPACE</span> <span class="pill-big">O(1)</span></div>
+          </div>
+          <div class="stats">
+            <div class="stat"><span class="label">Target</span> <span class="value" id="hrGoal">f(4)</span></div>
+            <div class="stat"><span class="label">Step</span> <span class="value"><span id="hrStepIndex">–</span><span class="step-slash">/</span><span id="hrStepTotal">0</span></span></div>
+            <div class="stat"><span class="label">Answer</span> <span class="value" id="hrResult">…</span></div>
+          </div>
+        </div>
+        <div class="canvas-container hr-chart-canvas-wrap">
+          <div class="hr-chart-head">
+            <span class="hr-chart-title">f(i) max loot · violet = house value</span>
+            <span class="hr-chart-hint" id="hrChartHint">0…4</span>
+          </div>
+          <div class="hr-loot-strip" id="hrNumsStrip" aria-live="polite"></div>
+          <canvas id="hrGraph" aria-label="House robber DP bar chart"></canvas>
+          <div style="margin-top: 20px;"></div>
+          <div class="complexity-label" >Rob or skip — pick the better path each house</div>
+        </div>
+        <div class="hr-progress-track" aria-hidden="true"><div class="hr-progress-fill" id="hrProgressFill"></div></div>
+      </div>
+    </div>
+
+    <section class="reel-viz-explain comparison-table hr-guide" aria-label="Quick guide">
+      <h3>Quick guide</h3>
+      <div class="table-row">
+        <div class="metric">Recurrence</div>
+        <div class="hr-guide-val">f(i) = max(f(i−1), f(i−2)+nums[i])</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">Choices</div>
+        <div class="hr-guide-val">Rob: f(i−2)+nums[i] · Skip: f(i−1)</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">Work</div>
+        <div class="hr-guide-val">Maximize loot · O(n) time, O(1) space</div>
+      </div>
+    </section>
+
+    <div class="panel hr-code-panel">
+      <div class="hr-ide" id="hrIde">
+        <div class="hr-ide-titlebar">
+          <span class="hr-traffic" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+          <span class="hr-ide-name">houseRobber.js</span>
+        </div>
+        <div class="hr-ide-body">
+          <pre class="hr-code" id="hrCode" aria-label="House robber implementation"></pre>
+        </div>
+      </div>
+    </div>
+
+    <footer class="reel-viz-footer footer-handle">
+      <div class="handle">
+        <span class="sym">@</span><span class="name">dev.hassan.najjar</span>
+      </div>
+    </footer>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<aside class="side-controls" aria-label="Playback controls">
+  <a class="side-controls-back" href="reel_studio.html">← Studio</a>
+  <div class="hint">Controls sit outside the 1080×1920 frame (screen capture / Reels).</div>
+  <div class="param-control">
+    <label for="hrHouseInput">house · 0–4</label>
+    <input type="number" id="hrHouseInput" min="0" max="4" value="4" aria-label="Last house index 0 to nums.length − 1">
+  </div>
+  <button type="button" class="primary" id="playBtn">▶ Play</button>
+  <button type="button" id="resetBtn">↺ Reset</button>
+  <div class="speed-control">
+    <label>Speed</label>
+    <input type="range" id="speedSlider" min="50" max="800" value="350" aria-label="Animation speed">
+  </div>
+  <label class="sound-row" title="Soft blip per code line; chord when finished">
+    <input type="checkbox" id="soundToggle" checked aria-label="Play sound during visualization">
+    <span>Sound</span>
+  </label>
+  <button type="button" class="record-screen" id="recordScreenBtn">● Record reel</button>
+  <button type="button" id="stopRecordBtn" disabled>■ Stop & save</button>
+  <button type="button" id="reelOnlyBtn" title="Layout with only the reel (clean tab for capture)">⛶ Reel-only view</button>
+  <div class="record-hint" id="recordStatus">Record → exact 1080×1920 (9:16). Upload as a Reel — Feed posts reject full-vertical.</div>
+</aside>
+
+<script src="reel-platform/reel-platform.js"></script>
+<script src="reel-platform/visualizers/house-robber-line-audio.js"></script>
+<script src="reel-platform/visualizers/house-robber-visualizer.js"></script>
+</body>
+</html>
