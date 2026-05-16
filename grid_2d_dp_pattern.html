@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grid 2D DP — Pattern 3</title>
+<link rel="stylesheet" href="reel-platform/reel-shell.css">
+<link rel="stylesheet" href="reel-platform/visualizers/fibonacci-reel.css">
+<link rel="stylesheet" href="reel-platform/visualizers/grid-dp-reel.css">
+</head>
+<body>
+
+<div class="reel-fit">
+  <div class="reel-scaler-wrap" id="reelScalerWrap">
+    <div class="reel-scaler" id="reelScaler">
+<div class="record-frame-wrapper" id="recordFrameTarget">
+  <div class="record-frame reel-viz-root gd-page">
+    <div class="reel-viz-stack">
+      <div style="margin-top: 280px;"></div>
+    <header class="reel-viz-header">
+      <div class="spark">Pattern 3</div>
+      <h1><span class="gd-word">Grid 2D DP</span></h1>
+      <div class="subtitle">1D = one row of decisions · <strong>2D = a grid</strong> — ↑ above + ← left.</div>
+    </header>
+
+    <div class="reel-viz-visualizer panels-row gd-panels-row">
+      <div class="panel gd-panel">
+        <div class="panel-header">
+          <div class="panel-title gd-panel-title">Line by line</div>
+          <p class="gd-hero-line" id="gdHeroLine" aria-live="polite">Press Play to step the algorithm — the current line and explanation show here.</p>
+          <div class="gd-chips" id="gdVars"></div>
+          <div class="gd-complexity-row" aria-label="Complexity">
+            <div class="gd-pill gd-pill-time"><span class="pill-label">TIME</span> <span class="pill-big">O(mn)</span></div>
+            <div class="gd-pill gd-pill-space"><span class="pill-label">SPACE</span> <span class="pill-big">O(mn)</span></div>
+          </div>
+          <div class="stats">
+            <div class="stat"><span class="label">Target</span> <span class="value" id="gdGoal">dp[2][3]</span></div>
+            <div class="stat"><span class="label">Step</span> <span class="value"><span id="gdStepIndex">–</span><span class="step-slash">/</span><span id="gdStepTotal">0</span></span></div>
+            <div class="stat"><span class="label">Answer</span> <span class="value" id="gdResult">…</span></div>
+          </div>
+        </div>
+        <div class="canvas-container gd-chart-canvas-wrap">
+          <div class="gd-chart-head">
+            <span class="gd-chart-title">paths per cell · ↑ pink · ← violet</span>
+            <span class="gd-chart-hint" id="gdChartHint">3×4</span>
+          </div>
+          <p class="gd-grid-legend" id="gdLegend">↑ <span class="up">above</span> · ← <span class="left">left</span> · fill each cell</p>
+          <canvas id="gdGrid" aria-label="2D DP grid"></canvas>
+          <div style="margin-top: 20px;"></div>
+          <div class="complexity-label" >New dimension · same thinking · table grows two ways</div>
+        </div>
+        <div class="gd-progress-track" aria-hidden="true"><div class="gd-progress-fill" id="gdProgressFill"></div></div>
+      </div>
+    </div>
+
+    <section class="reel-viz-explain comparison-table gd-guide" aria-label="Quick guide">
+      <h3>Quick guide</h3>
+      <div class="table-row">
+        <div class="metric">Recurrence</div>
+        <div class="gd-guide-val">dp[i][j] = dp[i−1][j] + dp[i][j−1]</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">Moves</div>
+        <div class="gd-guide-val">Unique Paths · right or down only</div>
+      </div>
+      <div class="table-row">
+        <div class="metric">Demo</div>
+        <div class="gd-guide-val">O(m×n) time & space · 3×4 demo</div>
+      </div>
+    </section>
+
+    <div class="panel gd-code-panel">
+      <div class="gd-ide" id="gdIde">
+        <div class="gd-ide-titlebar">
+          <span class="gd-traffic" aria-hidden="true"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+          <span class="gd-ide-name">uniquePaths.js</span>
+        </div>
+        <div class="gd-ide-body">
+          <pre class="gd-code" id="gdCode" aria-label="Grid 2D DP"></pre>
+        </div>
+      </div>
+    </div>
+
+    <footer class="reel-viz-footer footer-handle">
+      <div class="handle">
+        <span class="sym">@</span><span class="name">dev.hassan.najjar</span>
+      </div>
+    </footer>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+
+<aside class="side-controls" aria-label="Playback controls">
+  <a class="side-controls-back" href="reel_studio.html">← Studio</a>
+  <div class="hint">Controls sit outside the 1080×1920 frame (screen capture / Reels).</div>
+  <div class="hint">Fixed demo: 3×4 Unique Paths grid</div>
+  <button type="button" class="primary" id="playBtn">▶ Play</button>
+  <button type="button" id="resetBtn">↺ Reset</button>
+  <div class="speed-control">
+    <label>Speed</label>
+    <input type="range" id="speedSlider" min="50" max="800" value="350" aria-label="Animation speed">
+  </div>
+  <label class="sound-row" title="Soft blip per code line; chord when finished">
+    <input type="checkbox" id="soundToggle" checked aria-label="Play sound during visualization">
+    <span>Sound</span>
+  </label>
+  <button type="button" class="record-screen" id="recordScreenBtn">● Record reel</button>
+  <button type="button" id="stopRecordBtn" disabled>■ Stop & save</button>
+  <button type="button" id="reelOnlyBtn" title="Layout with only the reel (clean tab for capture)">⛶ Reel-only view</button>
+  <div class="record-hint" id="recordStatus">Record → exact 1080×1920 (9:16). Upload as a Reel — Feed posts reject full-vertical.</div>
+</aside>
+
+<script src="reel-platform/reel-platform.js"></script>
+<script src="reel-platform/visualizers/grid-dp-line-audio.js"></script>
+<script src="reel-platform/visualizers/grid-dp-visualizer.js"></script>
+</body>
+</html>
